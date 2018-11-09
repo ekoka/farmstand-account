@@ -23,7 +23,10 @@
 </template>
 
 <script>
+import URI from 'urijs'
 import {mapActions, mapGetters} from 'vuex'
+import {TENANT_HOST_TEMPLATE} from '@/assets/js/config'
+
 export default {
 
     computed: {
@@ -45,9 +48,8 @@ export default {
         saveTenant(){
             this.postTenant({tenant:this.tenant}).then(tenant=>{
                 const access_key = this.$store.getters['api/accessKey'].key('access_key')
-                const urlTemplate = 'https://{tenant}.simpleb2b.local:8080'
                 const url = URI.expand(
-                        urlTemplate, {tenant: tenant.key('name')}).search({
+                        TENANT_HOST_TEMPLATE, {tenant: tenant.key('name')}).search({
                     access_key
                 }).toString()
                 window.location.replace(url)
