@@ -1,12 +1,10 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-//import Buefy from 'buefy'
-//import 'buefy/dist/buefy.css'
-//Vue.use(Buefy)
 import store from './store'
 import router from './router'
 import App from './App'
+import './assets/css/main.scss'
 
 import GoogleAuth from 'vue-google-oauth'
 import {GoogleClientId} from './assets/js/config'

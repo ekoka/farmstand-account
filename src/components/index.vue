@@ -1,18 +1,48 @@
 <template>
-<div>
-    <h1>KISS Order Manager</h1>
-    <rl :to="{name:'Signin'}">Log In</rl> | <rl :to="{name:'Signup'}">Sign Up</rl>
-
-    <router-view></router-view>
-
+<div class="hero is-fullheight">
+    <div class="hero-head">
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-brand">
+                    <div class="navbar-item">
+                        <h1 class="title is-3">
+                            KISS Order Manager
+                        </h1>
+                    </div>
+                    <div class="navbar-burger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="navbar-menu">
+                    <div class="navbar-item">
+                        <router-link 
+                            class="button is-primary" 
+                            :to="{name:'Login'}">
+                            Log in
+                        </router-link> 
+                    </div>
+                    <div class="navbar-item">
+                        <router-link 
+                            class="button is-warning" 
+                            :to="{name:'Registration'}">
+                            Register
+                        </router-link> 
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="hero-body">
+        <router-view />
+    </div>
+    <div class="hero-foot"></div>
 </div>
 </template>
 
 <script>
 export default {
-    created(){
-        this.cmpalias('router-link', 'rl')
-    }
 }
 </script>
 

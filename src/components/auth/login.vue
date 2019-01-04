@@ -1,0 +1,120 @@
+<template>
+<div class="container">
+    <div class="columns">
+        <div class="column">
+            <p class="subtitle is-3">
+                <a id="login-button" @click="googleLogin">
+                    <span class="icon">
+                        <i class="mdi mdi-google"></i>
+                    </span>
+                    Log in with Google
+                </a>
+            </p>
+            
+            <p class="subtitle is-5">
+                Or 
+            </p>
+
+            <p class="subtitle is-3">Log in with email</p>
+
+            <div>
+                <div class="field">
+                    <div class="control">
+                        <input class="input" v-model="email" placeholder="e.g. jsmith@mail.com"/>
+                    </div>
+                </div>
+                <div class="control">
+                    <button class="button is-warning is-size-4" 
+                        :disabled="!validForm" @click="emailLogin">
+                    Send access code 
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <p class="subtitle is-3">
+                Or <router-link :to="{name: 'Registration'}" class="button is-primary is-size-4">Register</router-link> if you don't have an account.
+            </p>
+        </div>
+    </div>
+</div>
+</template>
+
+<script>
+import {mapActions} from 'vuex'
+import URI from 'urijs'
+
+export default {
+    created(){
+        this.cmpalias('router-link', 'rl')
+    },
+
+    data(){
+        return {
+            email: null,
+        }
+    },
+
+    computed:{
+
+        validEmail(){
+            return this.email
+        },
+
+        validForm(){
+            return this.validEmail
+        },
+
+    },
+
+    methods: {
+        googleLogin(){
+            // as seen at https://github.com/TinyNova/vue-google-oauth
+            this.$googleAuth().directAccess()
+            this.$googleAuth().signIn((googleUser) => {
+                // clear the state
+                this.logOut()
+                // if google signin succeeds try obtaining an access key
+                // from api
+                const token = googleUser.getAuthResponse().id_token
+                return this.getAccessKey({
+                    token, provider:'google'
+                }).then(accessKey=>{
+                    return this.getAccount()
+                    //})
+                            //const urlTemplate = 'http://{tenant}.simpleb2b.local:8080/admin'
+                            //const url = URI.expand(
+                            //        urlTemplate, {tenant: tenant.key('name')}).search({
+                            //    access_key
+                            //}).toString()
+                            //window.location.replace(url)
+                            ////this.$router.push(url)
+                        //})
+                    //}
+                }).then(account=>{
+                    this.$router.push({name: 'Account'})
+                }).catch(error=>{
+                    console.log('could not log in')
+                })
+
+            }, function (error) {
+                // things to do when log-in fails
+            })
+        },
+
+        logOut(){
+            this.$store.commit('api/resetApi')
+        },
+
+        emailLogin(){
+        },
+
+        ...mapActions({
+            getAccount: 'api/getAccount',
+            getAccessKey: 'api/getAccessKey',
+        })
+
+    },
+}
+</script>
+

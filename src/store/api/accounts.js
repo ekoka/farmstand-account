@@ -32,24 +32,17 @@ export default {
     },
 
     actions: {
-        postSignin({getters},{data}){
-            let url = getters.root.url('signins')
-            getters.http({url, method:'post', data}).then(response=>{
-                return HAL(response.data)
-            }).catch(error=>{
+        postLogin({getters, dispatch},{data}){
+            return dispatch('getRoot').then(root=>{
+                let url = root.url('signins')
+                getters.http({url, method:'post', data}).then(response=>{
+                    return HAL(response.data)
+                })
+            }).catch(error =>{
                 console.log(error)
                 console.log(error.response)
             })
-        },
-        getAccount({getters, commit, dispatch}){
-            const url = getters.accessKey.url('account')
-            return getters.http({url}).then(response => {
-                commit('setAccount', {account:response.data})
-                // if account has tenant load it as well
-                return HAL(response.data)
-            }).catch(error => {
-                console.log(error.response)
-            })
+
         },
 
         postAccount({dispatch, commit, getters}, {provider, token}){
@@ -77,6 +70,27 @@ export default {
                 console.log(error)
             })
         },
+
+        getAccessKey({getters, commit, dispatch}, {provider, token}){
+            const url = getters.root.url('access_key',null, {provider, token})
+            return getters.http({url}).then(response => {
+                commit('setAccessKey', {accessKey: response.data})
+                return getters.accessKey
+            }).catch(error=>{
+                console.log(error)
+            })
+        },
+
+        getAccount({getters, commit, dispatch}){
+            const url = getters.accessKey.url('account')
+            return getters.http({url}).then(response => {
+                commit('setAccount', {account:response.data})
+                return getters.account
+            }).catch(error => {
+                console.log(error.response)
+            })
+        },
+
 
         getTenant({commit, getters}, {url}={}){
             if (!url){
