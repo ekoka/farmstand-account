@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="control">
-                    <button class="button is-warning is-size-4" 
+                    <button class="button is-primary is-size-4" 
                         :disabled="!validForm" @click="emailLogin">
                     Send access code 
                     </button>
@@ -33,7 +33,7 @@
         </div>
         <div class="column">
             <p class="subtitle is-3">
-                Or <router-link :to="{name: 'Registration'}" class="button is-primary is-size-4">Register</router-link> if you don't have an account.
+                Or <router-link :to="{name: 'Registration'}" class="button is-warning is-size-4">Register</router-link> if you don't have an account.
             </p>
         </div>
     </div>
@@ -42,7 +42,6 @@
 
 <script>
 import {mapActions} from 'vuex'
-import URI from 'urijs'
 
 export default {
     created(){
@@ -81,16 +80,6 @@ export default {
                     token, provider:'google'
                 }).then(accessKey=>{
                     return this.getAccount()
-                    //})
-                            //const urlTemplate = 'http://{tenant}.simpleb2b.local:8080/admin'
-                            //const url = URI.expand(
-                            //        urlTemplate, {tenant: tenant.key('name')}).search({
-                            //    access_key
-                            //}).toString()
-                            //window.location.replace(url)
-                            ////this.$router.push(url)
-                        //})
-                    //}
                 }).then(account=>{
                     this.$router.push({name: 'Account'})
                 }).catch(error=>{
@@ -107,9 +96,14 @@ export default {
         },
 
         emailLogin(){
+            this.postSignin({
+                data:{email:this.email}
+            }).then(response=>{
+            })
         },
 
         ...mapActions({
+            postSignin: 'api/postSignin',
             getAccount: 'api/getAccount',
             getAccessKey: 'api/getAccessKey',
         })

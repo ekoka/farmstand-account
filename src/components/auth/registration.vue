@@ -69,7 +69,7 @@
 
 <script>
 import {mapActions} from 'vuex'
-import URI from 'urijs'
+import _ from 'lodash/fp'
 
 export default {
     data (){
@@ -97,13 +97,28 @@ export default {
     },
 
     methods: {
+        resetLogin(){
+            _.each(k=>{
+                this.login[k] = null
+            })(_.keys(this.login))
+        },
         emailRegistration(){
-            let data = this.login
-            this.postLogin({data}).then(response=>{
+            let token = this.login
+            let email = token.email
+            let provider = 'simpleb2b'
+            this.postAccount({
+                provider, token
+            }).then(response=>{
                 this.message = 'A link to access your account has been e-mailed to you.'
-                this.login = {}
+                this.resetLogin()
+                console.log(email)
+                return this.postSignin({email})
+            }).catch(error=>{
+                //TODO: handle 409 here
+                throw error
             })
         },
+
         googleRegistration(){
             // as seen at https://github.com/TinyNova/vue-google-oauth
             this.$googleAuth().directAccess()
@@ -115,26 +130,15 @@ export default {
                 //const url = api_host + '/api/v1/accounts'
                 return this.postAccount({
                     token, provider:'google'
+                }).then(response=>{
+                    return this.getAccessKey({token, provider:'google'})
+                }).then(accessKey=>{
+                    return this.getAccount()
                 }).then(account=>{
-                    let tenantUrl = account.url('tenant')
-
-                    if (tenantUrl){
-                        const access_key = this.$store.getters['api/accessKey'].key('access_key')
-                        this.getTenant({url:tenantUrl}).then(tenant=>{
-                            const urlTemplate = 'http://{tenant}.simpleb2b.local:8082/admin'
-                            const url = URI.expand(
-                                    urlTemplate, {tenant: tenant.key('name')}).search({
-                                access_key
-                            }).toString()
-                            window.location.replace(url)
-                            //this.$router.push(url)
-                        })
-                    }
-                    this.$router.push({name: 'Tenant'})
-                }).catch(error=>{
+                    this.$router.push({name: 'Account'})
+                }).cacth(error=>{
                     console.log('could not log in')
                 })
-
             }, function (error) {
                 // things to do when login fails
             })
@@ -146,8 +150,10 @@ export default {
 
         ...mapActions({
             postAccount: 'api/postAccount',
-            postLogin: 'api/postLogin',
+            postSignin: 'api/postSignin',
+            gettAccount: 'api/getAccount',
             getTenant: 'api/getTenant',
+            getAccessKey: 'api/getAccessKey',
         })
     },
 

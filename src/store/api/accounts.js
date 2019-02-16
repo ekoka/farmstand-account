@@ -4,7 +4,7 @@ export default {
     state: {
         account: null,
         accessKey: null,
-        tenant: null,
+        domain: null,
     },
 
     getters: {
@@ -14,8 +14,8 @@ export default {
         accessKey(state){
             return HAL(state.accessKey)
         },
-        tenant(state){
-            return HAL(state.tenant)
+        domain(state){
+            return HAL(state.domain)
         },
     },
 
@@ -26,64 +26,78 @@ export default {
         setAccount(state, {account}){
             state.account = account
         },
-        setTenant(state, {tenant}){
-            state.tenant = tenant
+        setDomain(state, {domain}){
+            state.domain = domain
         },
     },
 
     actions: {
-        postLogin({getters, dispatch},{data}){
-            return dispatch('getRoot').then(root=>{
-                let url = root.url('signins')
-                getters.http({url, method:'post', data}).then(response=>{
-                    return HAL(response.data)
-                })
-            }).catch(error =>{
-                console.log(error)
-                console.log(error.response)
+        postSignin({getters}, {data}){
+            let url = getters.root.url('signins')
+            return getters.http({
+                url, 
+                data,
+                method:'post',
+            }).then(response=>{
+                return HAL(response.data)
             })
-
         },
 
         postAccount({dispatch, commit, getters}, {provider, token}){
             const url = getters.root.url('accounts') 
-            const responseHandler = function(data){
-                const resp = HAL(data)
-                // first set the access key
-                const accessKey = resp.embedded('access_key').resource
-                commit('setAccessKey', {accessKey})
-                // then get the account
-                return dispatch('getAccount')
-            }
+            //const handler = function(response){
+            //    const response = HAL(response.data)
+            //    // first set the access key
+            //    const accessKey = response.embedded('access_key')
+            //    commit('setAccessKey', {accessKey:accessKey.resource})
+            //    return accessKey
+            //    // then get the account
+            //    //return dispatch('getAccount')
+            //}
             
             return getters.http({
-                url, data: {token, provider}, method: 'post'
+                url,
+                data: {token, provider}, 
+                method: 'post',
             }).then(response => {
-                return responseHandler(response.data)
-            }).catch(error=>{
-                if (error.response.status==409){
-                    // 409 conflict, account already exists
-                    return responseHandler(error.response.data)
-                }
-                throw error
-            }).catch(error=>{
-                console.log(error)
+                return HAL(response.data)
+                // first set the access key
+                //const accessKey = response.embedded('access_key')
+                //commit('setAccessKey', {accessKey:accessKey.resource})
+                //return accessKey
+                //return handler(response)
+                //response = HAL(response.data)
+                //const accessKey = response.embedded('access_key').resource
+                //commit('setAccessKey', accessKey)
+                //return response
+                //return responseHandler(response.data)
             })
+            //.catch(error=>{
+            //    if (error.response.status==409){
+            //        // 409 conflict, account already exists
+            //        return getters.accessKey
+            //    }
+            //    throw error
+            //})
         },
 
         getAccessKey({getters, commit, dispatch}, {provider, token}){
-            const url = getters.root.url('access_key',null, {provider, token})
-            return getters.http({url}).then(response => {
+            const url = getters.root.url('access_key', null, 
+                    {provider, token})
+            return getters.http({
+                url
+            }).then(response => {
                 commit('setAccessKey', {accessKey: response.data})
                 return getters.accessKey
-            }).catch(error=>{
-                console.log(error)
             })
         },
 
         getAccount({getters, commit, dispatch}){
             const url = getters.accessKey.url('account')
-            return getters.http({url}).then(response => {
+            return getters.http({
+                url,
+                auth:true,
+            }).then(response => {
                 commit('setAccount', {account:response.data})
                 return getters.account
             }).catch(error => {
@@ -91,42 +105,47 @@ export default {
             })
         },
 
-
-        getTenant({commit, getters}, {url}={}){
-            if (!url){
-                url = getters.account.url('tenant')
-            }
-            if (!url){
-                return
-            }
-            return getters.http({url}).then(response=>{
-                commit('setTenant', {tenant:response.data})
+        getDomain({commit, getters}, {domain}={}){
+            let url = getters.root.url('domain', {domain})
+            return getters.http({url, auth:true}).then(response=>{
                 return HAL(response.data)
-            }).catch(error=>{
-                console.log(error.response)
             })
         },
 
-        postTenant({dispatch, getters}, {tenant}){
-            let url = getters.root.url('tenants')
+        getDomainNameCheck({commit, getters}, {domain}={}){
+            let url = getters.root.url(
+                'domain-name-check', null, {q:domain})
+            return getters.http({
+                url,
+            }).then(response=>{
+                return response.data
+            })
+        },
+
+        getDomains({getters, commit}, {}){
+            url = getters.account.url('domains')
+        },
+
+        postDomain({dispatch, getters}, {domain}){
+            let url = getters.root.url('domains')
             //const authScheme = 'access-token'
             //const auth = authScheme + ' ' + getters.accessKey.key('access_key')
             return getters.http({
-                url, data:tenant, method:'post', auth:true
+                url, data:domain, method:'post', auth:true
                 //headers: {'Authorization': auth},
             }).then(function(response){
                 return dispatch(
-                    'getTenant', {url: HAL(response.data).url('location')})
+                    'getDomain', {url: HAL(response.data).url('location')})
             }).catch(function(error){
                 if (error.response.status==409){
                     let resp = HAL(error.response.data)
                     // two reasons to get a 409:
-                    // either you already have a tenant, in which case you'll 
+                    // either you already have a domain, in which case you'll 
                     // receive a 'location' pointing to it in the response
                     if (resp.key('location')){
-                        return dispatch('getTenant', {url: resp.url('location')})
+                        return dispatch('getDomain', {url: resp.url('location')})
                     }
-                    // or this is just a case of duplicate tenant name, 
+                    // or this is just a case of duplicate domain name, 
                     // in which case we'll simply rethrow
                 }
                 throw error

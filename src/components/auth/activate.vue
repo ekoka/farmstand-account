@@ -1,6 +1,6 @@
 <template>
 <div>
-    <h1 class="title">KISS Order Manager</h1>
+    <h1 class="title">SimpleB2B Order Manager</h1>
     <h3 class="subtitle">Activate Account</h3>
     <p>Thank you for confirming your signup, you should now be redirected to complete your registration.</p>
 </div>
@@ -27,11 +27,6 @@ export default {
             const lang = query.lang
 
             if (token){
-                //this.postAccount({provider:'simpleb2b', token}).then(r=>{
-                //    //this.$router.push({name: 'AdminIndex'})
-                //    this.$router.push({name: 'NewTenant'})
-                //})
-
                 return this.postAccount({
                     token, provider:'simpleb2b'
                 }).then(account=>{

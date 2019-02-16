@@ -1,30 +1,20 @@
 <template>
-<div class="section">
-    <h1 class="title is-3">Hello {{account.key('first_name')}}</h1>
-    <catalogs :catalogs="account.embedded('tenants')" :roles="account.key('roles')"/>
+<div>
+    <navbar/>
+    <div class="section">
+        <div class="columns">
+            <div class="column is-2-desktop is-3-widescreen"></div>
+            <router-view class="column"/>
+            <div class="column is-2-desktop is-3-widescreen"></div>
+        </div>
+    </div>
 </div>
 </template>
 
 <script>
-import Catalogs from './catalogs'
-import {mapActions, mapGetters} from 'vuex'
+import navbar from './navbar'
+
 export default {
-    components: { Catalogs },
-    data(){
-        return {
-        }
-    },
-
-    computed: {
-        ...mapGetters({
-            account: 'api/account',
-        }),
-    },
-
-    methods:{
-    },
-
-
-
+    components: { navbar, },
 }
 </script>
