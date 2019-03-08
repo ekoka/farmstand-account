@@ -1,9 +1,20 @@
-import Profile from '@/components/account/profile'
+import Index from '@/components/account/profile'
+import Card from '@/components/account/profile/card'
+import Edit from '@/components/account/profile/edit'
 
 export default {
     path: 'profile',
-    name: 'Profile',
-    component: Profile,
+    component: Index,
     children: [
+        {
+            name: 'Profile',
+            component: Card,
+            path: '',
+        },
+        {
+            name: 'EditProfile',
+            component: Edit,
+            path: 'edit',
+        },
     ],
 }

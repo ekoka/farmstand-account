@@ -1,5 +1,6 @@
 <template>
 <div>
+    <Modal :activeComponent.sync="activeComponent" />
     <div class="card">
         <div class="card-content">
             <h4 class="title is-4">Catalogs administered by you</h4>
@@ -14,19 +15,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="t,k in account.embedded('domains')">
+                        <tr v-for="d,k in domains">
                             <td>
-                                {{t.data.name}}
+                                {{d.data.name}}
                             </td>
                             <td>
-                                {{t.data.company_name}}
+                                {{d.data.company_name}}
                             </td>
-                            <td>2018, Nov 18</td>
+                            <td>{{d.data.creation_date}}</td>
                             <td class="has-text-right">
-                                <a :href="url({domain: t.data.name})"><strong>Go to catalog</strong></a>
+                                <a :href="url({domain: d.data.name})"><strong>Go to catalog</strong></a>
                             </td>
                             <td class="has-text-right">
-                                <a :href="url({domain: t.data.name, path:'/admin'})"><strong>Go to admin</strong></a>
+                                <a :href="url({domain: d.data.name, path:'/admin'})"><strong>Go to admin</strong></a>
                             </td>
                         </tr>
                     </tbody>
@@ -34,6 +35,9 @@
 
             
             </div><!-- media -->
+            <button class="button is-outlined is-link" @click="showModal">
+                Add a new catalog
+            </button>
             <router-link class="button is-outlined is-link" :to="{name:'CatalogItem'}">
                 Add a new catalog
             </router-link>
@@ -44,13 +48,35 @@
 
 <script>
 import URI from 'urijs'
+import _ from 'lodash/fp'
+
 import {mapActions, mapGetters} from 'vuex'
 
+import Modal from '@/components/utils/modal'
+import NewCatalog from '../item'
+
 export default {
+    components: {Modal, NewCatalog},
+
     computed: {
         ...mapGetters({
             account: 'api/account',
         }),
+    },
+
+    data(){
+        return {
+            activeComponent: null,
+            domains:[]
+        }
+    },
+
+    mounted(){
+        this.getDomains().then(resp=>{
+            _.each(d=>{
+                this.domains.push(d)
+            })(resp.embedded('domains'))
+        })
     },
 
     methods: {
@@ -65,6 +91,13 @@ export default {
         //go(url){
         //    window.location.replace(url)
         //},
+        ...mapActions({
+            getDomains: 'api/getDomains',
+        }),
+        
+        showModal(){
+            this.activeComponent = NewCatalog
+        },
     },
 }
 </script>

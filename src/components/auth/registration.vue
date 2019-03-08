@@ -111,8 +111,7 @@ export default {
             }).then(response=>{
                 this.message = 'A link to access your account has been e-mailed to you.'
                 this.resetLogin()
-                console.log(email)
-                return this.postSignin({email})
+                return this.postSignin({data:{email}})
             }).catch(error=>{
                 //TODO: handle 409 here
                 throw error

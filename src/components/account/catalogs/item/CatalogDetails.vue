@@ -6,7 +6,7 @@
             <label class="label">Catalog name</label>
         </div>
         <div class="control">
-            <input class="input" v-model="tenant.catalog_name"/>
+            <input class="input" v-model="data.details.catalog_name"/>
         </div>
     </div>
     <div class="field">
@@ -14,10 +14,13 @@
             <label class="label">Short description</label>
         </div>
         <div class="control">
-            <input class="input" v-model="tenant.description"/>
+            <input class="input" v-model="data.details.description"/>
         </div>
     </div>
     <div class="field">
+        <button class="is-link is-outlined button" @click="prev">
+           Back 
+        </button>
         <button class="is-link button" @click="next">
             Continue
         </button>
@@ -27,16 +30,25 @@
 
 <script>
 export default {
-    props: ['downstream'],
-
+    props: ['domain'],
     data(){
-        return {
-            tenant: this.$jsoncopy(this.downstream)
+        let data = this.$jsoncopy(this.domain)
+        if (!data.details || data.details.length==0){
+            data.details  = {
+                catalog_name: null,
+                description: null,
+            }
         }
+        return { data }
     },
 
     methods:{
+        prev(){
+            this.$emit('prev', this.data)
+        },
+
         next(){
+            this.$emit('next', this.data)
         }
     },
 }

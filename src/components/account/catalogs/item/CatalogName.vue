@@ -15,7 +15,7 @@
     <div class="field has-text-centered has-addons is-size-4">
         <div class="control is-size-4">https://</div> 
         <div class="control">
-            <input class="input" placeholder="yourcatalog" v-model="tenant.name"/> 
+            <input class="input" placeholder="yourcatalog" v-model="name"/> 
         </div><!-- control -->
         <div class="control is-size-4">
             .simpleb2b.io
@@ -47,7 +47,7 @@ import _ from 'lodash/fp'
 import validationMsg from './validation-msg'
 
 export default {
-    props: ['downstream'],
+    props: ['domain'],
     components: {
         validationMsg,
     },
@@ -62,7 +62,7 @@ export default {
             },
             nameAvailable: true,
             lastChange: null,
-            tenant: this.$jsoncopy(this.downstream),
+            name: this.domain.name,
         }
     },
 
@@ -76,18 +76,18 @@ export default {
         },
 
         maxLengthValidator(){
-            return this.tenant.name && this.tenant.name.length<=50
+            return this.name && this.name.length<=50
         },
 
         invalidCharacters(){
             return _.any(c=>{
                 return !'abcdefghijklmnopqrstuvwxyz1234567890'.includes(
                     c.toLowerCase())
-            })(this.tenant.name)
+            })(this.name)
         },
 
         minLengthValidator(){
-            return this.tenant.name && this.tenant.name.length>=3
+            return this.name && this.name.length>=3
         },
 
         validName(){
@@ -140,13 +140,14 @@ export default {
     },
 
     watch:{
-        'tenant.name': {
+        'name': {
             handler(n, o){
                 let currentChange = this.setChange()
                 setTimeout(()=>{
                     this.updateSearchResult({currentChange, name:n})
                 }, 1000)
-            }
+            },
+            immediate: true,
         },
     },
 
@@ -175,7 +176,7 @@ export default {
                 // only proceed with http if valid length
                 if (this.validLength){
                     // proceed with http get
-                    this.searchTenant(name).then(response=>{
+                    this.searchDomain(name).then(response=>{
                         setData({available:false})
                     }).catch(error=>{
                         if (error.response.status==404){
@@ -187,27 +188,29 @@ export default {
                 }
             } 
         },
-        url({tenant, path=null}){
-            const urlTemplate = 'http://{tenant}.simpleb2b.local:8082'
+        url({domain, path=null}){
+            const urlTemplate = 'http://{domain}.simpleb2b.local:8082'
             const access_key = this.$store.getters['api/accessKey'].key('access_key')
-            //const urlTemplate = 'http://{tenant}.simpleb2b.local:8082/admin'
-            const uri = URI.expand(urlTemplate, {tenant}).search({access_key})
+            //const urlTemplate = 'http://{domain}.simpleb2b.local:8082/admin'
+            const uri = URI.expand(urlTemplate, {domain}).search({access_key})
             uri.pathname(path)
             return uri.toString()
         },
 
-        searchTenant(tenant){
-            return this.getTenantNameCheck({tenant})
+        searchDomain(domain){
+            return this.getDomainNameCheck({domain})
         },
 
         next(){      
-            if (this.tenant.name){
-                this.$emit('next', this.tenant)
+            if (this.name){
+                let data = this.$jsoncopy(this.domain)
+                data.name = this.name
+                this.$emit('next', data)
             }
         },
 
         ...mapActions({
-            getTenantNameCheck: 'api/getTenantNameCheck',
+            getDomainNameCheck: 'api/getDomainNameCheck',
         }),
     },
 }

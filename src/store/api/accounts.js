@@ -81,6 +81,43 @@ export default {
             //})
         },
 
+        postPaymentSource({getters, dispatch}, {data}){
+            let url = getters.account.url('payment_sources')
+            return getters.http({
+                url, method: 'post', data, auth:true
+            }).then(response=>{
+                return response.data
+            })
+        },
+
+        getPaymentSources({getters, dispatch}){
+            let url = getters.account.url('payment_sources')
+            return getters.http({
+                url, auth:true
+            }).then(response=>{
+                return HAL(response.data)
+            })
+        },
+
+        deletePaymentSource({getters}, {source_id}){
+            let url = getters.account.url('payment_source', {source_id})
+            return getters.http({
+                url, auth:true, method:'delete', 
+            }).then(response=>{
+                return response.data
+            })
+        },
+
+        putAccount({getters}, {data}){
+            const url = getters.accessKey.url('account')
+            return getters.http({
+                url,
+                method: 'put',
+                data,
+                auth: true,
+            })
+        },
+
         getAccessKey({getters, commit, dispatch}, {provider, token}){
             const url = getters.root.url('access_key', null, 
                     {provider, token})
@@ -93,6 +130,10 @@ export default {
         },
 
         getAccount({getters, commit, dispatch}){
+            //if (getters.account){
+            //    return getters.account
+            //}
+           
             const url = getters.accessKey.url('account')
             return getters.http({
                 url,
@@ -100,8 +141,6 @@ export default {
             }).then(response => {
                 commit('setAccount', {account:response.data})
                 return getters.account
-            }).catch(error => {
-                console.log(error.response)
             })
         },
 
@@ -122,37 +161,44 @@ export default {
             })
         },
 
-        getDomains({getters, commit}, {}){
-            url = getters.account.url('domains')
+        getDomains({getters}){
+            let url = getters.root.url('domains')
+            console.log(url)
+            return getters.http({
+                url, auth:true
+            }).then(response=>{
+                return HAL(response.data)
+            })
         },
 
-        postDomain({dispatch, getters}, {domain}){
+        postDomain({dispatch, getters}, {data}){
             let url = getters.root.url('domains')
             //const authScheme = 'access-token'
             //const auth = authScheme + ' ' + getters.accessKey.key('access_key')
             return getters.http({
-                url, data:domain, method:'post', auth:true
+                url, data, method:'post', auth:true
                 //headers: {'Authorization': auth},
             }).then(function(response){
                 return dispatch(
                     'getDomain', {url: HAL(response.data).url('location')})
-            }).catch(function(error){
-                if (error.response.status==409){
-                    let resp = HAL(error.response.data)
-                    // two reasons to get a 409:
-                    // either you already have a domain, in which case you'll 
-                    // receive a 'location' pointing to it in the response
-                    if (resp.key('location')){
-                        return dispatch('getDomain', {url: resp.url('location')})
-                    }
-                    // or this is just a case of duplicate domain name, 
-                    // in which case we'll simply rethrow
-                }
-                throw error
-            }).catch(error=>{
-                console.log(error)
-                throw error
             })
+            //.catch(function(error){
+            //    if (error.response.status==409){
+            //        let resp = HAL(error.response.data)
+            //        // two reasons to get a 409:
+            //        // either you already have a domain, in which case you'll 
+            //        // receive a 'location' pointing to it in the response
+            //        if (resp.key('location')){
+            //            return dispatch('getDomain', {url: resp.url('location')})
+            //        }
+            //        // or this is just a case of duplicate domain name, 
+            //        // in which case we'll simply rethrow
+            //    }
+            //    throw error
+            //}).catch(error=>{
+            //    console.log(error)
+            //    throw error
+            //})
         },
     },
 }

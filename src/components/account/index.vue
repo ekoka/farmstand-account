@@ -3,9 +3,9 @@
     <navbar/>
     <div class="section">
         <div class="columns">
-            <div class="column is-2-desktop is-3-widescreen"></div>
-            <router-view class="column"/>
-            <div class="column is-2-desktop is-3-widescreen"></div>
+            <div class="column is-1"></div>
+            <router-view class="column is-10"/>
+            <div class="column is-1"></div>
         </div>
     </div>
 </div>

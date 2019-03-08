@@ -74,6 +74,15 @@ const API = {
                 console.log(error.response)
             })
         },
+        getPlans({getters}){
+            let url = getters.root.url('plans')
+            getters.http
+            return getters.http({
+                url,
+            }).then(function(response){
+                return HAL(response.data)
+            })
+        },
         ...accounts.actions,
     },
 }

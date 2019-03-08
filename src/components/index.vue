@@ -6,7 +6,9 @@
                 <div class="navbar-brand">
                     <div class="navbar-item">
                         <h1 class="title is-3">
-                            <router-link :to="{name: 'Index'}"> SimpleQuote - Order Manager</router-link>
+                            <router-link :to="{name: 'Index'}"> 
+                                Productlist - Order Manager
+                            </router-link>
                         </h1>
                     </div>
                     <div class="navbar-burger">
