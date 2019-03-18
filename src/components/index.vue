@@ -20,16 +20,16 @@
                 <div class="navbar-menu">
                     <div class="navbar-item">
                         <router-link 
-                            class="button is-primary" 
-                            :to="{name:'Login'}">
-                            Log in
+                            class="button is-warning" 
+                            :to="{name:'Registration'}">
+                            Register
                         </router-link> 
                     </div>
                     <div class="navbar-item">
                         <router-link 
-                            class="button is-warning" 
-                            :to="{name:'Registration'}">
-                            Register
+                            class="button is-primary" 
+                            :to="{name:'Login'}">
+                            Log in
                         </router-link> 
                     </div>
                 </div>

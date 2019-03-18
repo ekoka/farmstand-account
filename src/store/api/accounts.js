@@ -2,8 +2,11 @@ import {HAL} from '@/utils/hal'
 
 export default {
     state: {
+        // when sending access_token via httponly cookie 
+        //accountUrl: null, 
+        // when sending access_token via headers 
+        accessToken: null,
         account: null,
-        accessKey: null,
         domain: null,
     },
 
@@ -11,17 +14,21 @@ export default {
         account(state){
             return HAL(state.account)
         },
-        accessKey(state){
-            return HAL(state.accessKey)
+        accessToken(state){
+            return HAL(state.accessToken)
         },
         domain(state){
             return HAL(state.domain)
         },
+        accountUrl(state){
+            return HAL(state.accessToken).url('account')
+        },
     },
 
     mutations: {
-        setAccessKey(state, {accessKey}){
-            state.accessKey = accessKey
+        // when sending access_token via header
+        setAccessToken(state, {accessToken}){
+            state.accessToken = accessToken
         },
         setAccount(state, {account}){
             state.account = account
@@ -29,6 +36,10 @@ export default {
         setDomain(state, {domain}){
             state.domain = domain
         },
+        // when sending access_token via httponly cookie
+        //setAccountUrl(state, {url}){
+        //    state.accountUrl = url
+        //},
     },
 
     actions: {
@@ -45,40 +56,13 @@ export default {
 
         postAccount({dispatch, commit, getters}, {provider, token}){
             const url = getters.root.url('accounts') 
-            //const handler = function(response){
-            //    const response = HAL(response.data)
-            //    // first set the access key
-            //    const accessKey = response.embedded('access_key')
-            //    commit('setAccessKey', {accessKey:accessKey.resource})
-            //    return accessKey
-            //    // then get the account
-            //    //return dispatch('getAccount')
-            //}
-            
             return getters.http({
                 url,
                 data: {token, provider}, 
                 method: 'post',
             }).then(response => {
                 return HAL(response.data)
-                // first set the access key
-                //const accessKey = response.embedded('access_key')
-                //commit('setAccessKey', {accessKey:accessKey.resource})
-                //return accessKey
-                //return handler(response)
-                //response = HAL(response.data)
-                //const accessKey = response.embedded('access_key').resource
-                //commit('setAccessKey', accessKey)
-                //return response
-                //return responseHandler(response.data)
             })
-            //.catch(error=>{
-            //    if (error.response.status==409){
-            //        // 409 conflict, account already exists
-            //        return getters.accessKey
-            //    }
-            //    throw error
-            //})
         },
 
         postPaymentSource({getters, dispatch}, {data}){
@@ -109,7 +93,7 @@ export default {
         },
 
         putAccount({getters}, {data}){
-            const url = getters.accessKey.url('account')
+            const url = getters.accountUrl
             return getters.http({
                 url,
                 method: 'put',
@@ -118,23 +102,37 @@ export default {
             })
         },
 
-        getAccessKey({getters, commit, dispatch}, {provider, token}){
-            const url = getters.root.url('access_key', null, 
-                    {provider, token})
+        postAccessToken({getters, commit, dispatch}, {provider, token}){
+            const url = getters.root.url('access_token')
             return getters.http({
-                url
+                data: {provider, token},
+                method: 'post',
+                url,
+                auth:true,
+            // when going through httponly cookie
+            //}).then(response=>{
+            //    response = HAL(response.data)
+            //    commit('setAccountUrl', {url: response.url('account')})
+            //    return response
+            //})
+            // when using access_token in header
             }).then(response => {
-                commit('setAccessKey', {accessKey: response.data})
-                return getters.accessKey
+                commit('setAccessToken', {accessToken: response.data})
+                return getters.accessToken
             })
         },
 
-        getAccount({getters, commit, dispatch}){
-            //if (getters.account){
-            //    return getters.account
-            //}
-           
-            const url = getters.accessKey.url('account')
+        deleteAccessToken({getters}){
+            let url = getters.root.url('access_token')
+            return getters.http({
+                url,
+                method: 'delete',
+                auth: true,
+            })
+        },
+
+        getAccount({getters, commit}){
+            const url = getters.accountUrl 
             return getters.http({
                 url,
                 auth:true,
@@ -144,8 +142,10 @@ export default {
             })
         },
 
-        getDomain({commit, getters}, {domain}={}){
-            let url = getters.root.url('domain', {domain})
+        getDomain({commit, getters}, {url, domain}){
+            if (!url){
+                url = getters.root.url('domain', {domain})
+            }
             return getters.http({url, auth:true}).then(response=>{
                 return HAL(response.data)
             })
@@ -163,7 +163,6 @@ export default {
 
         getDomains({getters}){
             let url = getters.root.url('domains')
-            console.log(url)
             return getters.http({
                 url, auth:true
             }).then(response=>{
@@ -173,32 +172,21 @@ export default {
 
         postDomain({dispatch, getters}, {data}){
             let url = getters.root.url('domains')
-            //const authScheme = 'access-token'
-            //const auth = authScheme + ' ' + getters.accessKey.key('access_key')
             return getters.http({
                 url, data, method:'post', auth:true
-                //headers: {'Authorization': auth},
-            }).then(function(response){
-                return dispatch(
-                    'getDomain', {url: HAL(response.data).url('location')})
             })
-            //.catch(function(error){
-            //    if (error.response.status==409){
-            //        let resp = HAL(error.response.data)
-            //        // two reasons to get a 409:
-            //        // either you already have a domain, in which case you'll 
-            //        // receive a 'location' pointing to it in the response
-            //        if (resp.key('location')){
-            //            return dispatch('getDomain', {url: resp.url('location')})
-            //        }
-            //        // or this is just a case of duplicate domain name, 
-            //        // in which case we'll simply rethrow
-            //    }
-            //    throw error
-            //}).catch(error=>{
-            //    console.log(error)
-            //    throw error
-            //})
         },
+
+        putDomain({getters}, {url, domain, data}){
+            if (!url){
+                url = getters.root.url('domain', {domain})
+            }
+            return getters.http({
+                url, method:'put', data, auth:true,
+            }).then(response=>{
+                return HAL(response.data)
+            })
+        },
+
     },
 }

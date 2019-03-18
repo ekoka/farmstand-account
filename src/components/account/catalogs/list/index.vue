@@ -8,9 +8,9 @@
                 <table class="table is-hoverable is-fullwidth">
                     <thead>
                         <tr>
-                            <th>Identifier</th>
-                            <th>Name</th>
-                            <th>Created</th>
+                            <th>Catalog identifier</th>
+                            <th></th>
+                            <th></th>
                             <th colspan="2" class="has-text-right"></th>
                         </tr>
                     </thead>
@@ -20,9 +20,11 @@
                                 {{d.data.name}}
                             </td>
                             <td>
-                                {{d.data.company_name}}
+                                <router-link :to="{name:'CatalogSettings', params:{domain: d.data.name}}">
+                                    Settings
+                                </router-link> 
                             </td>
-                            <td>{{d.data.creation_date}}</td>
+                            <td></td>
                             <td class="has-text-right">
                                 <a :href="url({domain: d.data.name})"><strong>Go to catalog</strong></a>
                             </td>
@@ -35,9 +37,11 @@
 
             
             </div><!-- media -->
-            <button class="button is-outlined is-link" @click="showModal">
-                Add a new catalog
-            </button>
+            <div v-if="false">
+                <button class="button is-outlined is-link" @click="showModal">
+                    Add a new catalog
+                </button>
+            </div>
             <router-link class="button is-outlined is-link" :to="{name:'CatalogItem'}">
                 Add a new catalog
             </router-link>
@@ -49,6 +53,7 @@
 <script>
 import URI from 'urijs'
 import _ from 'lodash/fp'
+import {DOMAIN_HOST_TEMPLATE} from '@/assets/js/config'
 
 import {mapActions, mapGetters} from 'vuex'
 
@@ -74,6 +79,7 @@ export default {
     mounted(){
         this.getDomains().then(resp=>{
             _.each(d=>{
+                console.dir(d)
                 this.domains.push(d)
             })(resp.embedded('domains'))
         })
@@ -81,10 +87,9 @@ export default {
 
     methods: {
         url({domain, path=null}){
-            const urlTemplate = 'http://{domain}.simpleb2b.local:8082'
-            const access_key = this.$store.getters['api/accessKey'].key('access_key')
-            //const urlTemplate = 'http://{domain}.simpleb2b.local:8082/admin'
-            const uri = URI.expand(urlTemplate, {domain}).search({access_key})
+            const urlTemplate = DOMAIN_HOST_TEMPLATE
+            const access_token = this.$store.getters['api/accessToken'].key('access_token')
+            const uri = URI.expand(urlTemplate, {domain}).search({access_token})
             uri.pathname(path)
             return uri.toString()
         },

@@ -1,19 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
+//import createPersistedState from 'vuex-persistedstate'
+import createPersistedState from '@/assets/js/persistedstate'
 
 import api from './api'
 import inquiry from './inquiry'
 
-import {BASE_URL} from '@/assets/js/config'
+import {PRODUCTLIST_INDEX} from '@/assets/js/config'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     modules: {api, inquiry},
     state: {
+        loggedIn: false,
         currentLang: 'en',
         defaultLang: 'en',
+        PRODUCTLIST_INDEX,
     },
     getters: {
         lang (state, getters){
@@ -23,5 +26,13 @@ export default new Vuex.Store({
             return 'lang=' + getters.lang
         },
     },
-    plugins: [createPersistedState()],
+    mutations: {
+        setLoggedIn(state, value){
+            state.loggedIn = value
+        },
+    },
+    plugins: [createPersistedState({
+        //key: 'productlist-admin',
+        storage: localStorage,
+    })],
 })

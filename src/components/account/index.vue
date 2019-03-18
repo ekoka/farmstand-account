@@ -16,5 +16,14 @@ import navbar from './navbar'
 
 export default {
     components: { navbar, },
+    mounted(){
+        let watchLoggedState = ()=>{
+            if(!this.$store.state['loggedIn']){
+                window.location.href = this.$store.state['PRODUCTLIST_INDEX']
+            }
+            setTimeout(watchLoggedState, 2000)
+        }
+        watchLoggedState()
+    },
 }
 </script>

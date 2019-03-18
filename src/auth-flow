@@ -1,0 +1,59 @@
+Login
+------
+- using either a google token, an email/password combo, or a temporary login code  (signin) sent by email, user attempts to log in.
+    - browser POSTs an accessKey with those credentials
+        - if all good a resource address is returned to fetch the new key 
+        - user makes a request and fetches account information.
+
+Logout
+------
+- from account admin
+    - clear accessKey locally
+    - clear accessKey remotely
+    - proceed with Redirect protocol
+
+- from catalog admin
+    - clear accessKey locally
+    - clear accessKey remotely
+    - redirect to a logout page at account admin, which ensures to clear its stale accessKey and storage.  
+
+- from catalog
+    - clear accessKey locally
+    - clear accessKey remotely
+    - redirect to a logout page at account admin, which ensures to clear its stale accessKey and storage.  
+
+Non authenticated access to either admins or catalog
+----------------------------------------------------
+- first private component must check if `accessKey` is included as part of the request's params
+    - if included (e.g. anchor from account admin)  :
+        - check if a local copy of accessKey is present and matches this one
+            - if included proceed
+            - else:
+                - clear the storage and request fresh account information
+    - if not included (e.g. open new tab with same url) 
+        - check if "accessKey" is set
+            - if accessKey is set, proceed
+            - else if component is private, proceed with Redirect protocol
+
+
+Accessing api with a stale accessKey
+------------------------------------
+- api validates accessKey
+    - if key is invalid (e.g. stale or non-existent), api returns a 401 Unauthorized:
+        - browser must proceed with Redirect protocol.
+
+
+Redirect protocol
+-----------------
+- clear localStorage of all sensitive info 
+- then
+    - from catalog admin redirect to account login
+    - from account admin redirect to account login 
+    - from catalog redirect to catalog index
+
+Login pages
+-----------
+- must check if accessKey is present in url or in storage
+- if present:
+    - try to redirect ot appropriate dashboard
+

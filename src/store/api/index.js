@@ -1,8 +1,12 @@
 import axios from 'axios'
-import accounts from './accounts'
 import {HAL} from '@/utils/hal'
 import {Cache} from '@/utils/cache'
 import {API_ROOT, API_HOST} from '@/assets/js/config'
+
+// the following are *not* vuex submodules
+// their contents is simply merged into the API module
+import accounts from './accounts'
+
 
 const API = {
     namespaced: true,
@@ -19,7 +23,10 @@ const API = {
         http(state, getters){
             return (req={url, method:'get', data:undefined, auth:false})=>{
                 if (req.auth){
+                    // using headrs for auth
                     req.headers = getters.authHeaders
+                    // using httpOnly cookies for auth
+                    //req.withCredentials = true
                 }
                 delete req.auth
                 return axios(req)
@@ -27,8 +34,8 @@ const API = {
         },
 
         authHeaders(state, getters){
-            const authScheme = 'access-token'
-            const auth = authScheme + ' ' + getters.accessKey.key('access_key')
+            const authScheme = 'access_token'
+            const auth = authScheme + ' ' + getters.accessToken.key('access_token')
             return {'Authorization': auth}
         },
 
@@ -56,7 +63,11 @@ const API = {
         resetApi(state){
             initApi({state, skip:['root']})
             //initApi({state})
-        }
+        },
+
+        clearState(state){
+            initApi({state})
+        },
     },
         
     actions: {

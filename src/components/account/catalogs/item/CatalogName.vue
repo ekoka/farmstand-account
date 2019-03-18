@@ -4,11 +4,11 @@
 
     <br>
 
-    <p>You first need to choose a name that will uniquely identify your catalog as part of the <strong>SimpleB2B</strong> network.
+    <p>You first need to choose a nickname that will uniquely identify your catalog as part of the <strong>Productlist</strong> network.
         
         <br><br>
         
-        <span class="has-text-grey is-size-5">e.g. https://<span class="has-text-info is-italic">yourcatalog</span>.simpleb2b.io</span>
+        <span class="has-text-grey is-size-5">e.g. https://<span class="has-text-info is-italic">yourcatalog</span>.productlist.io</span>
     </p>
 
         <br>
@@ -18,7 +18,7 @@
             <input class="input" placeholder="yourcatalog" v-model="name"/> 
         </div><!-- control -->
         <div class="control is-size-4">
-            .simpleb2b.io
+            .productlist.io
         </div><!-- control -->
 
 
@@ -26,6 +26,9 @@
     <validationMsg :showicon="true" v-if="search.name!==null" :val="nameMsg"> 
     </validationMsg>
     <div>
+        <router-link :to="{name:'CatalogList'}" class="button is-outlined">
+            Cancel
+        </router-link>
         <button 
             v-if="validLength"
             class="is-link button" 
@@ -189,9 +192,9 @@ export default {
             } 
         },
         url({domain, path=null}){
-            const urlTemplate = 'http://{domain}.simpleb2b.local:8082'
+            const urlTemplate = 'http://{domain}.productlist.local:8082'
             const access_key = this.$store.getters['api/accessKey'].key('access_key')
-            //const urlTemplate = 'http://{domain}.simpleb2b.local:8082/admin'
+            //const urlTemplate = 'http://{domain}.productlist.local:8082/admin'
             const uri = URI.expand(urlTemplate, {domain}).search({access_key})
             uri.pathname(path)
             return uri.toString()

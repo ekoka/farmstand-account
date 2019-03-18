@@ -1,5 +1,6 @@
 import CatalogIndex from '@/components/account/catalogs'
 import CatalogItem from '@/components/account/catalogs/item'
+import CatalogSettings from '@/components/account/catalogs/settings'
 import CatalogList from '@/components/account/catalogs/list'
 
 export default {
@@ -13,8 +14,13 @@ export default {
         },
         {
             name: 'CatalogItem',
-            path: 'catalogs/new',
+            path: 'new',
             component: CatalogItem,
+        },
+        {
+            path: ':domain',
+            name: 'CatalogSettings',
+            component: CatalogSettings,
         },
     ],
 }

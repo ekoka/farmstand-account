@@ -24,7 +24,25 @@
             <div>
                 <div class="field">
                     <label class="label">
-                        First name: 
+                        Email: 
+                    </label>
+
+                    <div class="control">
+                        <input class="input" v-model="login.email"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">
+                         Choose a password (optional):
+                    </label>
+
+                    <div class="control">
+                        <input class="input" type="password" v-model="login.password"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">
+                        First name (optional): 
                     </label>
 
                     <div class="control">
@@ -33,23 +51,13 @@
                 </div>
                 <div class="field">
                     <label class="label">
-                        Last name: 
+                        Last name (optional):
                     </label>
 
                     <div class="control">
                         <input class="input" v-model="login.last_name"/>
                     </div>
                 </div>
-                <div class="field">
-                    <label class="label">
-                        Email: 
-                    </label>
-
-                    <div class="control">
-                        <input class="input" v-model="login.email"/>
-                    </div>
-                </div>
-
                 <div class="control">
                     <button class="button is-warning is-size-4" 
                         :disabled="!validForm" @click="emailRegistration">
@@ -79,6 +87,7 @@ export default {
                 first_name: null,
                 last_name: null,
                 email: null,
+                password: null,
             },
 
         }
@@ -90,10 +99,20 @@ export default {
             return this.login.email
         },
 
-        validForm(){
-            return this.validEmail
+        validPassword(){
+            // TODO: establish some rules for a safe password
+            return true
+
+            //if(this.login.password){
+            //    return this.login.password==this.confirmPassword
+            //}
+            //// password is optional
+            //return true
         },
 
+        validForm(){
+            return this.validEmail && this.validPassword 
+        },
     },
 
     methods: {
@@ -105,11 +124,11 @@ export default {
         emailRegistration(){
             let token = this.login
             let email = token.email
-            let provider = 'simpleb2b'
+            let provider = 'productlist'
             this.postAccount({
                 provider, token
             }).then(response=>{
-                this.message = 'A link to access your account has been e-mailed to you.'
+                this.message = 'A link to activate your account has been e-mailed to you.'
                 this.resetLogin()
                 return this.postSignin({data:{email}})
             }).catch(error=>{
@@ -123,15 +142,16 @@ export default {
             this.$googleAuth().directAccess()
             this.$googleAuth().signIn((googleUser) => {
                 // clear the state
-                this.logOut()
+                this.$store.commit('api/resetApi')
                 // if login succeeds try to create an account
                 const token = googleUser.getAuthResponse().id_token
                 //const url = api_host + '/api/v1/accounts'
                 return this.postAccount({
                     token, provider:'google'
                 }).then(response=>{
-                    return this.getAccessKey({token, provider:'google'})
-                }).then(accessKey=>{
+                    return this.postAccessToken({token, provider:'google'})
+                }).then(accessToken=>{
+                    this.$store.commit('setLoggedIn', true)
                     return this.getAccount()
                 }).then(account=>{
                     this.$router.push({name: 'Account'})
@@ -143,16 +163,12 @@ export default {
             })
         },
 
-        logOut(){
-            this.$store.commit('api/resetApi')
-        },
-
         ...mapActions({
             postAccount: 'api/postAccount',
             postSignin: 'api/postSignin',
             gettAccount: 'api/getAccount',
             getTenant: 'api/getTenant',
-            getAccessKey: 'api/getAccessKey',
+            postAccessToken: 'api/postAccessToken',
         })
     },
 

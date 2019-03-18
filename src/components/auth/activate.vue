@@ -33,15 +33,12 @@ export default {
                     let tenantUrl = account.url('tenant')
 
                     if (tenantUrl){
-                        const access_key = this.$store.getters['api/accessKey'].key('access_key')
-                        console.log(access_key)
-                        console.log(tenantUrl)
+                        const access_token = this.$store.getters['api/accessToken'].key('access_token')
                         this.getTenant({url:tenantUrl}).then(tenant=>{
                             const urlTemplate = 'http://{tenant}.simpleb2b.local:8080/admin'
-                            console.log(urlTemplate)
                             const url = URI.expand(
                                     urlTemplate, {tenant: tenant.key('name')}).search({
-                                access_key
+                                access_token
                             }).toString()
                             window.location.replace(url)
                         })
