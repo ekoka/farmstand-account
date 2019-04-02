@@ -6,13 +6,13 @@ import router from './router'
 import App from './App'
 import './assets/css/main.scss'
 
-import GoogleAuth from 'vue-google-oauth'
-import {GoogleClientId} from './assets/js/config'
+//import GoogleAuth from 'vue-google-oauth'
+//import {GoogleClientId} from './assets/js/config'
 
-Vue.use(GoogleAuth, {
-    client_id: GoogleClientId
-})
-Vue.googleAuth().load()
+//Vue.use(GoogleAuth, {
+//    client_id: GoogleClientId
+//})
+//Vue.googleAuth().load()
 
 // adding a global event bus 
 const EventBus = new Vue()

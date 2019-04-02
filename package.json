@@ -1,11 +1,11 @@
 {
   "name": "kiss",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "Product list account",
   "author": "",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --allowedHosts simpleb2b.local --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --allowedHosts .productlist.local --port 8081 --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "build": "node build/build.js"
   },

@@ -58,6 +58,7 @@ import {DOMAIN_HOST_TEMPLATE} from '@/assets/js/config'
 import {mapActions, mapGetters} from 'vuex'
 
 import Modal from '@/components/utils/modal'
+import cookies from '@/utils/cookies'
 import NewCatalog from '../item'
 
 export default {
@@ -77,9 +78,9 @@ export default {
     },
 
     mounted(){
+        //console.log(cookies.getCookie('account_id'))
         this.getDomains().then(resp=>{
             _.each(d=>{
-                console.dir(d)
                 this.domains.push(d)
             })(resp.embedded('domains'))
         })

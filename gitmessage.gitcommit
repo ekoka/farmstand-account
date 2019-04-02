@@ -1,0 +1,5 @@
+
+remove utils/docookies.js.
+add /get-access-token enpoint that can set a token on a requesting url
+if that url belongs to productlist.io's network.
+fix deletion of cookie.

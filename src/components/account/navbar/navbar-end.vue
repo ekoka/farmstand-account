@@ -14,11 +14,13 @@
 <script>
 export default {
     methods:{
-        logOut(){
-            this.$store.dispatch('api/deleteAccessToken').then(response=>{
-                this.$store.commit('api/clearState')
-                this.$store.commit('setLoggedIn', false)
-            })
+        logOut: async function(){
+            try {
+                await this.$store.dispatch('api/deleteAccessToken')
+            }catch(e){
+            }
+            this.$store.commit('api/clearState')
+            this.$store.commit('unsetLoggedIn')
         },
     }
 }

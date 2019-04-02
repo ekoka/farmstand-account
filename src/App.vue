@@ -1,7 +1,5 @@
 <template>
-<section id="app" class="">
     <router-view/>
-</section>
 </template>
 
 <script>

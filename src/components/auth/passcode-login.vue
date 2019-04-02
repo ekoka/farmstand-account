@@ -8,22 +8,16 @@ export default {
     mounted(){
         // get signin_id from url
         // get passcode from url
-        let {signin_id, passcode, lang} = this.$route.query 
-        //let token = encodeURIComponent(JSON.stringify({
-        //    passcode,
-        //    signin_id,
-        //}))
-        let token = {passcode, signin_id}
+        const {signin_id, passcode, lang} = this.$route.query 
+        const token = {passcode, signin_id}
         this.postAccessToken({
             provider:'productlist',
             token,
-        }).then(accessToken=>{
-            this.$store.commit('setLoggedIn', true)
+        }).then(response=>{
             return this.getAccount()
         }).then(account=>{
-            this.$router.push({name: 'Account'})
-        }).catch(error=>{
-            
+            this.$store.commit('setLoggedIn', {account:account.data})
+            return this.$router.push({name: 'Account'})
         })
 
         //TODO: set lang

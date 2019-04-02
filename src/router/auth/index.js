@@ -1,35 +1,42 @@
 // components
-import Index from '@/components/'
+import Index from '@/components/auth'
 import Login from '@/components/auth/login'
+import Logout from '@/components/auth/logout'
 import Registration from '@/components/auth/registration'
 import PasscodeLogin from '@/components/auth/passcode-login'
 import Activate from '@/components/auth/activate'
 
 export default {
-    name: 'Index', 
-    path: '/',
+    name: 'AuthIndex', 
+    path: '',
     component: Index,
     children: [
         {
-            path: 'login',  
+            path: '/login',  
             name: 'Login',
             component: Login,
             props:true
         },
         {
-            path: 'register',
+            path: '/logout',  
+            name: 'Logout',
+            component: Logout,
+            props:true
+        },
+        {
+            path: '/register',
             name: 'Registration',
             component: Registration,
             props:true
         },
         {
-            path: 'passcode-signin',
+            path: '/passcode-signin',
             name: 'PasscodeLogin',
             component: PasscodeLogin, 
             props: true,
         },
         {
-            path: 'account-confirmation',
+            path: '/account-confirmation',
             name: 'AccountConfirmation',
             component: PasscodeLogin, 
             props: true,

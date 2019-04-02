@@ -19,7 +19,7 @@ export default {
     mounted(){
         let watchLoggedState = ()=>{
             if(!this.$store.state['loggedIn']){
-                window.location.href = this.$store.state['PRODUCTLIST_INDEX']
+                window.location.href = this.$store.state['PRODUCTLIST_INDEX'] + '/logout'
             }
             setTimeout(watchLoggedState, 2000)
         }

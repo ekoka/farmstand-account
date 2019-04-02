@@ -7,21 +7,12 @@
             </p>
         </div>
         <div class="column">
-            <p class="subtitle is-3">
-                <a id="login-button" @click="googleLogin">
-                    <span class="icon">
-                        <i class="mdi mdi-google"></i>
-                    </span>
-                    Log in with Google
-                </a>
-            </p>
+            <div class="content">
+                <div ref="googlebtn" id="google-login-btn"></div>
+            </div>
             
-            <p class="subtitle is-5">
-                Or 
-            </p>
-            <p class="subtitle is-3">Log in with password</p>
-
-            <div>
+            <div class="box">
+                <p class="subtitle is-3">Or log in with your password</p>
                 <div class="field">
                     <div class="control">
                         <input class="input" v-model="email" placeholder="e.g. jsmith@mail.com"/>
@@ -37,19 +28,15 @@
                     <div class="control">
                         <button class="button is-primary is-size-4" 
                             :disabled="emptyPassword" 
-                            @click="passwordLogin">Send
+                            @click="passwordLogin">Log in
                         </button>
                     </div>
                 </div>
             </div>
 
-            <p class="subtitle is-5">
-                Or 
-            </p>
 
-            <p class="subtitle is-3">Log in via email</p>
-
-            <div>
+            <div class="box">
+                <p class="subtitle is-3">Or log in via email</p>
                 <div class="field">
                     <div class="control">
                         <input class="input" v-model="email" placeholder="e.g. jsmith@mail.com"/>
@@ -71,14 +58,28 @@
 import {mapActions} from 'vuex'
 
 export default {
-    created(){
-        this.cmpalias('router-link', 'rl')
-    },
-
+    props: ['gapiReady'],
     data(){
         return {
             email: null,
             password: null,
+        }
+    },
+
+    watch:{
+        gapiReady: {
+            handler(v){
+                if(v && this.$refs.googlebtn){
+                    this.renderGoogleBtn()
+                }
+            },
+            immediate: true,
+        },
+    },
+
+    mounted(){
+        if(this.gapiReady && this.$refs.googlebtn){
+            this.renderGoogleBtn()
         }
     },
 
@@ -101,34 +102,43 @@ export default {
     },
 
     methods: {
-        googleLogin(){
-            // as seen at https://github.com/TinyNova/vue-google-oauth
-            this.$googleAuth().directAccess()
-            this.$googleAuth().signIn((googleUser) => {
-                // clear the state
-                this.$store.commit('api/resetApi')
-                // if google signin succeeds try obtaining an access key
-                // from api
-                const token = googleUser.getAuthResponse().id_token
-                return this.getAccessKey({
-                    token, provider:'google'
-                }).then(accessToken=>{
-                    return this.getAccount()
-                }).then(account=>{
-                    this.$router.push({name: 'Account'})
-                }).catch(error=>{
-                    console.log('could not log in')
-                })
+        renderGoogleBtn(){
+            gapi.signin2.render('google-login-btn', {
+                'scope': 'profile email',
+                'width': 280,
+                'height': 70,
+                'longtitle': true,
+                'theme': 'light',
+                'onsuccess': this.googleLogin,
+                //'onfailure': onFailure
+            });
+        },
 
-            }, function (error) {
-                // things to do when log-in fails
+        googleLogin(googleUser){
+            // clear the state
+            this.$store.commit('api/resetApi')
+            // if google signin succeeds try obtaining an access key
+            // from api
+            const token = googleUser.getAuthResponse().id_token
+            // we skip the postAccount step to avoid accidentally
+            // registering a user who just wanted to check if they have
+            // an account.
+            // TODO: we should probably display an error message
+            // saying that there's no associated Productlist account
+            // for the given Google account.
+            return this.postAccessToken({
+                token, provider:'google'
+            }).then(accessToken=>{
+                return this.getAccount()
+            }).then(account=>{
+                this.$store.commit('setLoggedIn', {account:account.data})
+                this.$router.push({name: 'Account'})
             })
         },
 
         emailLogin(){
             this.postSignin({
                 data:{email:this.email}
-            }).then(response=>{
             })
         },
 
@@ -144,9 +154,9 @@ export default {
             this.postAccessToken({
                 token, provider: 'productlist'
             }).then(response=>{
-                this.$store.commit('setLoggedIn', true)
                 return this.getAccount()
             }).then(account=>{
+                this.$store.commit('setLoggedIn', {account:account.data})
                 return this.$router.push({name: 'Account'})
             })
         },

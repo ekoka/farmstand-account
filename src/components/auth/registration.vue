@@ -2,26 +2,13 @@
 <div class="container">
     <div class="columns">
         <div class="column">
-            <p class="subtitle is-3">
-                <a id="login-button" @click="googleRegistration">
-                    <span class="icon">
-                        <i class="mdi mdi-google"></i>
-                    </span>
-                    Register with Google
-                </a>
-            </p>
-            
-            <p class="subtitle is-5">
-                Or 
-            </p>
-
-            <div>
-                {{message}}
+            <div class="content">
+                <div ref="googlebtn" id="google-login-btn"></div>
             </div>
-
-            <p class="subtitle is-3">Register with your email</p>
-
-            <div>
+            
+            <div class="box">
+                <div> {{message}} </div>
+                <p class="subtitle is-3">Or register with your email</p>
                 <div class="field">
                     <label class="label">
                         Email: 
@@ -68,7 +55,7 @@
         </div>
         <div class="column">
             <p class="subtitle is-3">
-                Or <router-link :to="{name: 'Login'}" class="button is-primary is-size-4">Log in</router-link> if you already have an account.
+                <router-link :to="{name: 'Login'}" class="button is-primary is-size-4">Log in</router-link> if you already have an account.
             </p>
         </div>
     </div>
@@ -80,6 +67,7 @@ import {mapActions} from 'vuex'
 import _ from 'lodash/fp'
 
 export default {
+    props: ['gapiReady'],
     data (){
         return {
             message: '',
@@ -90,6 +78,23 @@ export default {
                 password: null,
             },
 
+        }
+    },
+
+    watch:{
+        gapiReady: {
+            handler(v){
+                if(v && this.$refs.googlebtn){
+                    this.renderGoogleBtn()
+                }
+            },
+            immediate: true,
+        },
+    },
+
+    mounted(){
+        if(this.gapiReady && this.$refs.googlebtn){
+            this.renderGoogleBtn()
         }
     },
 
@@ -116,6 +121,18 @@ export default {
     },
 
     methods: {
+        renderGoogleBtn(){
+            gapi.signin2.render('google-login-btn', {
+                'scope': 'profile email',
+                'width': 280,
+                'height': 70,
+                'longtitle': true,
+                'theme': 'light',
+                'onsuccess': this.googleRegistration,
+                //'onfailure': onFailure
+            });
+        },
+
         resetLogin(){
             _.each(k=>{
                 this.login[k] = null
@@ -137,29 +154,20 @@ export default {
             })
         },
 
-        googleRegistration(){
-            // as seen at https://github.com/TinyNova/vue-google-oauth
-            this.$googleAuth().directAccess()
-            this.$googleAuth().signIn((googleUser) => {
-                // clear the state
-                this.$store.commit('api/resetApi')
-                // if login succeeds try to create an account
-                const token = googleUser.getAuthResponse().id_token
-                //const url = api_host + '/api/v1/accounts'
-                return this.postAccount({
-                    token, provider:'google'
-                }).then(response=>{
-                    return this.postAccessToken({token, provider:'google'})
-                }).then(accessToken=>{
-                    this.$store.commit('setLoggedIn', true)
-                    return this.getAccount()
-                }).then(account=>{
-                    this.$router.push({name: 'Account'})
-                }).cacth(error=>{
-                    console.log('could not log in')
-                })
-            }, function (error) {
-                // things to do when login fails
+        googleRegistration(googleUser){
+            // clear the state
+            this.$store.commit('api/resetApi')
+            // if login succeeds try to create an account
+            const token = googleUser.getAuthResponse().id_token
+            return this.postAccount({
+                token, provider:'google'
+            }).then(response=>{
+                return this.postAccessToken({token, provider:'google'})
+            }).then(accessToken=>{
+                return this.getAccount()
+            }).then(account=>{
+                this.$store.commit('setLoggedIn', true)
+                this.$router.push({name: 'Account'})
             })
         },
 
