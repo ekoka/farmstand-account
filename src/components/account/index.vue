@@ -13,13 +13,22 @@
 
 <script>
 import navbar from './navbar'
+import cookies from '@/utils/cookies'
+import URI from 'urijs'
 
 export default {
     components: { navbar, },
     mounted(){
-        let watchLoggedState = ()=>{
-            if(!this.$store.state['loggedIn']){
-                window.location.href = this.$store.state['PRODUCTLIST_INDEX'] + '/logout'
+        const watchLoggedState = ()=>{
+            const loggedIn = cookies.getCookie('account_id')
+            //if(!this.$store.state['loggedIn']){
+            if(!loggedIn){
+                // clear the state again, just in case the cookie was
+                // removed by another app than this one (e.g. subdomain).
+                this.$store.dispatch('clear').then(()=>{
+                    const index = URI(this.$store.state.PRODUCTLIST_INDEX)
+                    window.location.href = index.path('/logout').href()
+                })
             }
             setTimeout(watchLoggedState, 2000)
         }

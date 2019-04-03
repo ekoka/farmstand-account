@@ -156,18 +156,19 @@ export default {
 
         googleRegistration(googleUser){
             // clear the state
-            this.$store.commit('api/resetApi')
-            // if login succeeds try to create an account
-            const token = googleUser.getAuthResponse().id_token
-            return this.postAccount({
-                token, provider:'google'
-            }).then(response=>{
-                return this.postAccessToken({token, provider:'google'})
-            }).then(accessToken=>{
-                return this.getAccount()
-            }).then(account=>{
-                this.$store.commit('setLoggedIn', true)
-                this.$router.push({name: 'Account'})
+            return this.$store.dispatch('api/resetApi').then(()=>{
+                // if login succeeds try to create an account
+                const token = googleUser.getAuthResponse().id_token
+                return this.postAccount({
+                    token, provider:'google'
+                }).then(response=>{
+                    return this.postAccessToken({token, provider:'google'})
+                }).then(accessToken=>{
+                    return this.getAccount()
+                }).then(account=>{
+                    this.$store.commit('logIn', {account:account.data})
+                    this.$router.push({name: 'Account'})
+                })
             })
         },
 

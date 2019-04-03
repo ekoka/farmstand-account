@@ -1,5 +1,10 @@
+watch logged state across domains
 
-remove utils/docookies.js.
-add /get-access-token enpoint that can set a token on a requesting url
-if that url belongs to productlist.io's network.
-fix deletion of cookie.
+remove cache from store.
+add a new action resetApi which clears the storage and feches the root
+in one go.
+make logout simply clear the cookie and delete the api token at the api
+level.
+change logged state being watched from localStorage to cookie. When
+cookie is missing clear storage again (in case the cookie was deleted by
+a third party, e.g. subdomain).

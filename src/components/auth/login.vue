@@ -116,23 +116,24 @@ export default {
 
         googleLogin(googleUser){
             // clear the state
-            this.$store.commit('api/resetApi')
-            // if google signin succeeds try obtaining an access key
-            // from api
-            const token = googleUser.getAuthResponse().id_token
-            // we skip the postAccount step to avoid accidentally
-            // registering a user who just wanted to check if they have
-            // an account.
-            // TODO: we should probably display an error message
-            // saying that there's no associated Productlist account
-            // for the given Google account.
-            return this.postAccessToken({
-                token, provider:'google'
-            }).then(accessToken=>{
-                return this.getAccount()
-            }).then(account=>{
-                this.$store.commit('setLoggedIn', {account:account.data})
-                this.$router.push({name: 'Account'})
+            this.$store.dispatch('api/resetApi').then(()=>{
+                // if google signin succeeds try obtaining an access key
+                // from api
+                const token = googleUser.getAuthResponse().id_token
+                // we skip the postAccount step to avoid accidentally
+                // registering a user who just wanted to check if they have
+                // an account.
+                // TODO: we should probably display an error message
+                // saying that there's no associated Productlist account
+                // for the given Google account.
+                return this.postAccessToken({
+                    token, provider:'google'
+                }).then(accessToken=>{
+                    return this.getAccount()
+                }).then(account=>{
+                    this.$store.commit('logIn', {account:account.data})
+                    this.$router.push({name: 'Account'})
+                })
             })
         },
 
@@ -147,7 +148,7 @@ export default {
             //    password:this.password,
             //    email:this.email,
             //}))
-            let token = {
+            const token = {
                 password:this.password,
                 email:this.email,
             }
@@ -156,7 +157,7 @@ export default {
             }).then(response=>{
                 return this.getAccount()
             }).then(account=>{
-                this.$store.commit('setLoggedIn', {account:account.data})
+                this.$store.commit('logIn', {account:account.data})
                 return this.$router.push({name: 'Account'})
             })
         },

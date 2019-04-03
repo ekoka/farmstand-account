@@ -27,10 +27,9 @@ export default new Vuex.Store({
         },
     },
     mutations: {
-        setLoggedIn(state, {account}){
-            state.loggedIn = account.account_id
+        logIn(state, {account}){
+            //state.loggedIn = account.account_id
             //createCookie('account_id', account.account_id, 365)
-            //console.log(setCookie)
             cookies.setCookie (
                 'account_id', 
                 account.account_id, 
@@ -38,9 +37,20 @@ export default new Vuex.Store({
                 '/', 
                 'productlist.local')
         },
-        unsetLoggedIn(state){
-            state.loggedIn = false
+        //unsetLoggedIn(state){
+        //    state.loggedIn = false
+        //    //cookies.removeCookie('account_id', '/', 'productlist.local')
+        //},
+
+        logOut(){
             cookies.removeCookie('account_id', '/', 'productlist.local')
+        },
+    },
+    actions: {
+        clear({dispatch, commit}){
+            dispatch('api/resetApi').then(()=>{
+                commit('logOut')
+            })
         },
     },
     plugins: [createPersistedState({

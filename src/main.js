@@ -37,7 +37,7 @@ Vue.prototype.cmpalias = function(cmpName, alias) {
 const VERSION = '1'
 new Vue({
     el: '#app',
-    created(){
+    mounted(){
         this.versionReset()
         //localStorage.clear()
         this.$store.dispatch('api/getRoot')
@@ -50,8 +50,8 @@ new Vue({
             if(localStorage.getItem('VERSION') == VERSION){
                 return
             }
-            this.$store.commit('api/resetApi')
-            this.$store.commit('inquiry/resetInquiry')
+            this.$store.dispatch('api/resetApi')
+            //this.$store.commit('inquiry/resetInquiry')
             localStorage.setItem('VERSION', VERSION)
         }
     },

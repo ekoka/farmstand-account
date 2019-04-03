@@ -16,7 +16,7 @@ export default {
         }).then(response=>{
             return this.getAccount()
         }).then(account=>{
-            this.$store.commit('setLoggedIn', {account:account.data})
+            this.$store.commit('logIn', {account:account.data})
             return this.$router.push({name: 'Account'})
         })
 

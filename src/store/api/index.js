@@ -1,25 +1,46 @@
 import axios from 'axios'
 import {HAL} from '@/utils/hal'
-import {Cache} from '@/utils/cache'
-import {API_ROOT, API_HOST} from '@/assets/js/config'
+import {API_ROOT} from '@/assets/js/config'
 
 // the following are *not* vuex submodules
 // their contents is simply merged into the API module
 import accounts from './accounts'
 
+const jsoncopy = obj=> JSON.parse(JSON.stringify(obj))
+const mkstate = ()=>{ 
+    // deep copy the init state from each submodule 
+    // as opposed to simply just copying the 1st level references.
+    // this step is useful, for modules that make use of caching,
+    // since the cache is a nested object.
+    return {
+        root: null,
+        ...jsoncopy(accounts.state),
+    }
+}
+
+const initApi = (state) => {
+    const initState = mkstate() 
+    Object.keys(initState).forEach(k=>{
+        // reinitialize state
+        state[k] = initState[k]
+    })
+}
+
 
 const API = {
     namespaced: true,
 
-    state:{},
+    /* Do not put any attributes in the `state{}` here!
+     *
+     * They will be overwritten since initialization of `state`
+     * happens in initApi().
+     * You should place your desired attributes either in the 
+     * `mkstate()` function or in one of the submodules.
+     * */
+    state:{},  // Warning /!\ Do not put anything here /!\
+
 
     getters: {
-        cache(state){
-            return ({key})=>{
-                return Cache(state.cache).fetch(key)
-            }
-        },
-
         http(state, getters){
             return (req={url, method:'get', data:undefined, auth:false})=>{
                 if (req.auth){
@@ -46,14 +67,8 @@ const API = {
         },
         ...accounts.getters,
     },
-    mutations: {
-        cache(state, {key, value}){
-            Cache(state.cache).store(key, value)
-        },
 
-        uncache(state, {key}){
-            Cache(state.cache).remove(key)
-        },
+    mutations: {
 
         setRoot(state, {root}){
             state.root = root
@@ -61,30 +76,20 @@ const API = {
         ...accounts.mutations,
 
         resetApi(state){
-            initApi({state, skip:['root']})
-            //initApi({state})
-        },
-
-        clearState(state){
-            initApi({state})
+            initApi(state)
         },
     },
         
     actions: {
         getRoot({getters,commit,state}){
-            //let resource = getters.root
-            //if (resource){
-            //    return HAL(resource)
-            //}
             return getters.http({
                 url: API_ROOT
             }).then(response=>{
                 commit('setRoot', {root:response.data})
                 return HAL(response.data)
-            }).catch(error=>{
-                console.log(error.response)
             })
         },
+
         getPlans({getters}){
             let url = getters.root.url('plans')
             getters.http
@@ -94,29 +99,14 @@ const API = {
                 return HAL(response.data)
             })
         },
+
+        resetApi({dispatch, commit}){
+            commit('resetApi')
+            return dispatch('getRoot')
+        },
         ...accounts.actions,
     },
 }
 
-function initApi({state, skip=[]}){
-    const jsoncopy = obj=> JSON.parse(JSON.stringify(obj))
-    let initState = {
-        cache: {},
-        root: null,
-        // ensure to only copy the state from each submodule
-        ...jsoncopy(accounts.state),
-    }
-    
-    // delete everything not in the skip list
-    // or reset to initState
-    Object.keys(state).concat(Object.keys(initState)).forEach(k=>{
-        if (skip.includes(k)){
-            return // skip
-        }
-        state[k] = initState[k]
-    })
-}
-
-initApi({state:API.state})
-
+initApi(API.state)
 export default API
