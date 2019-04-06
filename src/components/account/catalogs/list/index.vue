@@ -1,6 +1,5 @@
 <template>
 <div>
-    <Modal :activeComponent.sync="activeComponent" />
     <div class="card">
         <div class="card-content">
             <h4 class="title is-4">Catalogs administered by you</h4>
@@ -37,11 +36,6 @@
 
             
             </div><!-- media -->
-            <div v-if="false">
-                <button class="button is-outlined is-link" @click="showModal">
-                    Add a new catalog
-                </button>
-            </div>
             <router-link class="button is-outlined is-link" :to="{name:'CatalogItem'}">
                 Add a new catalog
             </router-link>
@@ -52,17 +46,16 @@
 
 <script>
 import URI from 'urijs'
-import _ from 'lodash/fp'
+import {each} from 'lodash/fp'
 import {DOMAIN_HOST_TEMPLATE} from '@/assets/js/config'
 
 import {mapActions, mapGetters} from 'vuex'
 
-import Modal from '@/components/utils/modal'
 import cookies from '@/utils/cookies'
 import NewCatalog from '../item'
 
 export default {
-    components: {Modal, NewCatalog},
+    components: {NewCatalog},
 
     computed: {
         ...mapGetters({
@@ -72,7 +65,6 @@ export default {
 
     data(){
         return {
-            activeComponent: null,
             domains:[]
         }
     },
@@ -80,7 +72,7 @@ export default {
     mounted(){
         //console.log(cookies.getCookie('account_id'))
         this.getDomains().then(resp=>{
-            _.each(d=>{
+            each(d=>{
                 this.domains.push(d)
             })(resp.embedded('domains'))
         })
@@ -101,9 +93,6 @@ export default {
             getDomains: 'api/getDomains',
         }),
         
-        showModal(){
-            this.activeComponent = NewCatalog
-        },
     },
 }
 </script>

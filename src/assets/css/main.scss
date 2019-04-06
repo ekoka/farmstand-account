@@ -6,6 +6,7 @@ $mdi-font-path : "~@mdi/font/fonts";
 @import "~@mdi/font/scss/materialdesignicons.scss";
 
 // bulma 
+@import "./colors-mine.scss";
 @import "~bulma/sass/utilities/mixins.sass";
 @import "./modal.scss";
 @import "~bulma/bulma";

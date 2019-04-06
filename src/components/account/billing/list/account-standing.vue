@@ -1,6 +1,8 @@
 <template>
 <div class="card has-margin-top-l">
-    <Modal :activeComponent.sync="activeComponent" />
+    <modal :active.sync="activateModal">
+        <PaymentScreen></PaymentScreen>
+    </modal>
     <div class="card-content">
         <h2 class="subtitle is-3">Account's standing <span class="subtitle is-5">(all amounts in CAD)</span></h2>
         <div class="media">
@@ -20,7 +22,7 @@
             <p class="subtitle media-content has-text-right">$15.34</p>
         </div>
         <p>
-            <a class="button is-link" title="Pay the total of the balance now" @click="showPaymentScreen">Pay now</a>
+            <a class="button is-link" title="Pay the total of the balance now" @click="activateModal=true">Pay now</a>
         </p>
 
     </div>
@@ -28,21 +30,15 @@
 </template>
 
 <script>
-import Modal from '@/components/utils/modal'
+import modal from '@/components/utils/modal'
 import PaymentScreen from './payment-screen'
 
 export default{
-    components: {Modal},
+    components: {modal, PaymentScreen},
 
     data(){
         return {
-            activeComponent: null,
-        }
-    },
-
-    methods: {
-        showPaymentScreen(){
-            this.activeComponent = PaymentScreen
+            activateModal: false,
         }
     },
 }

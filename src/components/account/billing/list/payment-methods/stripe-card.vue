@@ -67,7 +67,7 @@ export default {
         },
 
         cancel(){
-            this.$emit('close')
+            this.$emit('cancel')
         },
 
         saveCard(token){
@@ -75,7 +75,6 @@ export default {
                 data:{token}
             }).then(r=>{
                 this.$emit('saved')
-                this.$emit('close')
             })
         },
     },

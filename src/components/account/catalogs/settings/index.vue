@@ -4,43 +4,62 @@
 
     <div class="box">
         <h5 class="subtitle is-4">Summary</h5>
-        <p>Identifier <span class="has-text-weight-semibold">{{domain.name}}</span></p>
-        <p>Created on {{domain.creation_date}}</p>
-    </div>
+        <div class="content">
+            <p>Identifier <span class="has-text-weight-semibold">{{domain.name}}</span></p>
+            <p>Created on {{domain.creation_date}}</p>
+        </div>
 
-   <div class="box">
         <h5 class="subtitle is-4">Actions</h5>
-        <button class="button is-outlined">Go to admin</button> 
-        <button class="button is-outlined">Go to catalog</button> 
-        <span v-if="showAdvanced"> 
-            <button class="button is-warning">Temporary deactivate</button>
-            <button class="button is-danger">
-                <span class="icon is-small">
-                    <i class="mdi mdi-alert-decagram"></i>
+        <div class="content">
+            <button class="button is-outlined">Go to admin</button> 
+            <button class="button is-outlined">Go to catalog</button> 
+            <span v-if="showAdvanced"> 
+                <button class="button is-warning">Temporary deactivate</button>
+                <button class="button is-danger">
+                    <span class="icon is-small">
+                        <i class="mdi mdi-alert-decagram"></i>
+                    </span>
+                    <span>Delete catalog</span>
+                    <span class="icon is-small">
+                        <i class="mdi mdi-nuke"></i>
+                    </span>
+                </button>
+            </span>
+            <button v-if="!showAdvanced" @click="showAdvanced=true" class="button is-text">
+                <span>
+                    Show sensitive actions 
                 </span>
-                <span>Delete catalog</span>
                 <span class="icon is-small">
-                    <i class="mdi mdi-nuke"></i>
+                    <i class="mdi mdi-chevron-double-right"></i>
                 </span>
             </button>
-        </span>
-        <button v-if="!showAdvanced" @click="showAdvanced=true" class="button is-text">
-            <span>
-                Show sensitive actions 
-            </span>
-            <span class="icon is-small">
-                <i class="mdi mdi-chevron-double-right"></i>
-            </span>
-        </button>
-        <button v-else @click="showAdvanced=false" class="button is-text">
-            <span>
-                Hide sensitive actions 
-            </span>
-            <span class="icon is-small">
-                <i class="mdi mdi-chevron-double-left"></i>
-            </span>
-        </button>
+            <button v-else @click="showAdvanced=false" class="button is-text">
+                <span>
+                    Hide sensitive actions 
+                </span>
+                <span class="icon is-small">
+                    <i class="mdi mdi-chevron-double-left"></i>
+                </span>
+            </button>
+        </div>
     </div>
+
+    <stickycontent>
+        <div class="level">
+            <div class="level-left">
+            </div>
+            <div class="level-left">
+                <notification eventName="notification-setting-saved"></notification>
+            </div>
+            <div class="level-right"> 
+                <div class="level-item">
+                    <button @click="save" class="button is-link">
+                        Save catalog settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </stickycontent>
 
     <div class="box">
         <h5 class="subtitle is-4">Description</h5>
@@ -102,16 +121,20 @@
     <button class="button is-outlined is-dark">Change</button>
     </div>
 
-    <button @click="save" class="button is-link">Save catalog settings</button>
 
 </div>
 </template>
 
 <script>
-import _ from 'lodash/fp'
 import URI from 'urijs'
+import stickycontent from '@/components/utils/sticky-content'
+import notification from  '@/components/utils/messaging/notification'
 
 export default {
+    components: {
+        stickycontent,
+        notification,
+    },
 
     data(){
         return {
@@ -151,7 +174,17 @@ export default {
                 domain: this.domain_name,
                 data,
             }).then(r=>{
-                this.load()
+                return this.load()
+            }).then(()=>{
+                this.$eventBus.$emit('notification-setting-saved', {
+                    message: 'Catalog information updated.',
+                    options:{
+                        timeout: 1.75,
+                        color: 'is-warning',
+                        size: 'is-medium',
+                        close: false,
+                    },
+                })
             })
         },
     },

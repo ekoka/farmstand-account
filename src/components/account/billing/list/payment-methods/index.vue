@@ -1,10 +1,10 @@
 <template>
 <div class="card has-margin-top-l">
-    <!-- <Modal :activeComponent.sync="activeComponent" :data="data" />-->
-    <Modal :activeComponent.sync="activeComponent" 
-        :listenFor="['saved']" 
-        @saved="refresh">
-    </Modal>
+    <!-- <modal :activeComponent.sync="activeComponent" :data="data" />-->
+    <modal :active.sync="activateModal">
+        <StripeCard @cancel="activateModal=false" @saved="refresh">
+        </StripeCard>
+    </modal>
     <div class="card-content">
         <div class="level">
             <h2 class="title is-4">Payment methods</h2>
@@ -17,24 +17,26 @@
             <p class="media-right"><button @click="deleteSource(s.source_id)" class="button is-danger is-outlined">Remove</button></p>
         </div>
         <p class="media-left">
-            <button class="button is-link" @click="showModal">Add a payment method</button>
+            <button class="button is-link" @click="activateModal=true">
+                Add a payment method
+            </button>
         </p>
     </div><!-- card-content -->
 </div><!-- card -->
 </template>
 
 <script>
-import _ from 'lodash/fp'
+import {filter} from 'lodash/fp'
 
-import Modal from '@/components/utils/modal'
+import modal from '@/components/utils/modal'
 import StripeCard from './stripe-card'
 
 export default {
-    components: {Modal},
+    components: {modal, StripeCard},
 
     data(){
         return {
-            activeComponent: null,
+            activateModal: false,
             data: null,
             sources: [],
         }
@@ -45,11 +47,9 @@ export default {
     },
 
     methods: {
-        showModal(){
-            this.activeComponent = StripeCard
-        },
 
         refresh(){
+            this.activateModal = false
             this.$store.dispatch('api/getPaymentSources').then(res=>{
                 this.sources = res.data.sources
             })
@@ -66,7 +66,7 @@ export default {
         },
 
         removeSource(source_id){
-            this.sources = _.filter(s=>{
+            this.sources = filter(s=>{
                 return s.source_id!=source_id
             })(this.sources)
         },
