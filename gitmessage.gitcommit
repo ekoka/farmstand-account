@@ -1,8 +1,1 @@
-Add notification and confirmation messages
-
-add notification and confirmation components.
-make a sticky level component for "Save / Cancel" buttons.
-change color palette.
-improve modal by making use of a slot instead of passing down a
-component.
- 
+remove loggedIn status from localStorage

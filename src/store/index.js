@@ -13,7 +13,6 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     modules: {api},
     state: {
-        loggedIn: false,
         currentLang: 'en',
         defaultLang: 'en',
         PRODUCTLIST_INDEX,
