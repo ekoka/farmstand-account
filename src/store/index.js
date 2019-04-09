@@ -6,7 +6,12 @@ import cookies from '@/utils/cookies'
 
 import api from './api'
 
-import {PRODUCTLIST_INDEX} from '@/assets/js/config'
+import {
+    DOMAIN_HOST_TEMPLATE,
+    API_ROOT,
+    API_PUBLIC_ROOT,
+    PRODUCTLIST_INDEX,
+} from '@/assets/js/config'
 
 Vue.use(Vuex)
 
@@ -18,6 +23,23 @@ export default new Vuex.Store({
         PRODUCTLIST_INDEX,
     },
     getters: {
+        DOMAIN_URI(state, getters){
+            return URI.expand(DOMAIN_HOST_TEMPLATE, getters.subdomain)
+        },
+        API_ROOT_URI(state, getters){
+            return URI(API_ROOT)
+        },
+        API_PUBLIC_ROOT_URI(state, getters){
+            return URI(API_PUBLIC_ROOT)
+        },
+        PRODUCTLIST_URI(state, getters){
+            return URI(PRODUCTLIST_INDEX)
+        },
+
+        URI(state, getters){
+            return URI
+        },
+
         lang (state, getters){
             return state.currentLang || state.defaultLang
         },
@@ -29,20 +51,22 @@ export default new Vuex.Store({
         logIn(state, {account}){
             //state.loggedIn = account.account_id
             //createCookie('account_id', account.account_id, 365)
+            const domain = URI(PRODUCTLIST_INDEX).domain()
             cookies.setCookie (
                 'account_id', 
                 account.account_id, 
                 Infinity, 
                 '/', 
-                'productlist.local')
+                domain)
         },
         //unsetLoggedIn(state){
         //    state.loggedIn = false
         //    //cookies.removeCookie('account_id', '/', 'productlist.local')
         //},
 
-        logOut(){
-            cookies.removeCookie('account_id', '/', 'productlist.local')
+        logOut(state){
+            const domain = URI(PRODUCTLIST_INDEX).domain()
+            cookies.removeCookie('account_id', '/', domain)
         },
     },
     actions: {
