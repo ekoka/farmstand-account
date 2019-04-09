@@ -1,6 +1,2 @@
-Make some minor optimizations
-
-exclude mdi icons.
-import only the necessary from lodash. 
-
+Fix a small mistake in domain name checker 
 

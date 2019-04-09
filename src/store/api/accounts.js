@@ -152,8 +152,9 @@ export default {
         },
 
         getDomainNameCheck({commit, getters}, {domain}={}){
-            let url = getters.root.url(
-                'domain-name-check', null, {q:domain})
+            const url = getters.root.url(
+                'domain_name_check', null, {q:domain})
+            console.log(url)
             return getters.http({
                 url,
             }).then(response=>{
