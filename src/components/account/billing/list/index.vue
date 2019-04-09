@@ -8,10 +8,6 @@
 
 
 <script>
-
-import _ from 'lodash/fp'
-
-
 import AccountStanding from './account-standing'
 import PaymentMethods from './payment-methods'
 import BillingHistory from './billing-history'

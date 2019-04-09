@@ -46,7 +46,7 @@
 
 <script>
 import URI from 'urijs'
-import {each} from 'lodash/fp'
+import each from 'lodash/fp/each'
 import {DOMAIN_HOST_TEMPLATE} from '@/assets/js/config'
 
 import {mapActions, mapGetters} from 'vuex'

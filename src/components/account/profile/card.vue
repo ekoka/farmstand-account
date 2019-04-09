@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import _ from 'lodash/fp'
+import find from 'lodash/fp/find'
 import {mapActions} from 'vuex'
 
 import EditProfile from './edit'
@@ -55,7 +55,7 @@ export default {
 
         primaryEmail(){
             if (this.account.emails){
-                let email =  _.find(e=>{
+                let email =  find(e=>{
                     return e.primary==true
                 })(this.account.emails)
                 return email.email

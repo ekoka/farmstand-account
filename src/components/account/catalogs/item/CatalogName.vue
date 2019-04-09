@@ -45,7 +45,7 @@
 <script>
 import URI from 'urijs'
 import {mapActions, mapGetters} from 'vuex'
-import _ from 'lodash/fp'
+import any from 'lodash/fp/any'
 
 import validationMsg from './validation-msg'
 
@@ -83,7 +83,7 @@ export default {
         },
 
         invalidCharacters(){
-            return _.any(c=>{
+            return any(c=>{
                 return !'abcdefghijklmnopqrstuvwxyz1234567890'.includes(
                     c.toLowerCase())
             })(this.name)

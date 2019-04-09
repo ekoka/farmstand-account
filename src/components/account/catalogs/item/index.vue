@@ -11,8 +11,6 @@
 </template>
 
 <script>
-//import _ from 'lodash/fp'
-
 import CatalogName from './CatalogName'
 import CatalogDetails from './CatalogDetails'
 import CatalogPlans from './plans'

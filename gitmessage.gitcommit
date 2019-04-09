@@ -1,4 +1,6 @@
+Make some minor optimizations
 
-add API_PUBLIC_ROOT as an alias to PUBLIC_API_ROOT in config.js.conf.
-set domain in cookie from config rather than hardcoding it.
-add a few getters to resolve to key urls related to the host and domain.
+exclude mdi icons.
+import only the necessary from lodash. 
+
+

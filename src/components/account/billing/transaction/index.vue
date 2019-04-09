@@ -4,8 +4,3 @@
     <div> <a href="">Billing</a> / Make payment</div>
 </div>
 </template>
-
-<script>
-export default {
-}
-</script>

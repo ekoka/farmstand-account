@@ -36,7 +36,6 @@
 
 <script>
 import {mapActions} from 'vuex' 
-import _ from 'lodash/fp'
 
 export default {
     props: ['domain'],

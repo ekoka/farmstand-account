@@ -64,7 +64,8 @@
 
 <script>
 import {mapActions} from 'vuex'
-import _ from 'lodash/fp'
+import each from 'lodash/fp/each'
+import keys from 'lodash/fp/keys'
 
 export default {
     props: ['gapiReady'],
@@ -134,9 +135,9 @@ export default {
         },
 
         resetLogin(){
-            _.each(k=>{
+            each(k=>{
                 this.login[k] = null
-            })(_.keys(this.login))
+            })(keys(this.login))
         },
         emailRegistration(){
             let token = this.login

@@ -5,6 +5,7 @@ import createPersistedState from '@/assets/js/persistedstate'
 import cookies from '@/utils/cookies'
 
 import api from './api'
+import URI from 'urijs'
 
 import {
     DOMAIN_HOST_TEMPLATE,

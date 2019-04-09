@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {filter} from 'lodash/fp'
+import filter from 'lodash/fp/filter'
 
 import modal from '@/components/utils/modal'
 import StripeCard from './stripe-card'

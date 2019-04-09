@@ -26,7 +26,8 @@ import Basic from './basic'
 import Standard from './standard'
 import Limited from './limited'
 
-import _ from 'lodash/fp'
+import map from 'lodash/fp/map'
+
 export default {
     components: {
         //Binder, Shelf, Library
@@ -44,7 +45,7 @@ export default {
     mounted(){
         this.getPlans().then(plans=>{
             //this.plans = plans.embedded('plans')
-            this.plans = _.map(p=>{
+            this.plans = map(p=>{
                 return p.data
             })(plans.embedded('plans'))
         })
