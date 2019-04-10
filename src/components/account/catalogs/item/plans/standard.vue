@@ -10,25 +10,25 @@
         <ul style="height: 6em;">
             <li class="title is-5 is-marginless">
                 <span class="icon">
-                    <i class="mdi mdi-chevron-right"></i>
+                    <i class="iconify mdi" data-icon="mdi-chevron-right"></i>
                 </span>
                 Product catalog
             </li>
             <li class="title is-5 is-marginless">
                 <span class="icon">
-                    <i class="mdi mdi-chevron-right"></i>
+                    <i class="iconify mdi" data-icon="mdi-chevron-right"></i>
                 </span>
                 Up to 1000 items
             </li>
             <li class="title is-5 is-marginless">
                 <span class="icon">
-                    <i class="mdi mdi-chevron-right"></i>
+                    <i class="iconify mdi" data-icon="mdi-chevron-right"></i>
                 </span>
                 Private access control
             </li>
             <li class="title is-5 is-marginless">
                 <span class="icon">
-                    <i class="mdi mdi-chevron-right"></i>
+                    <i class="iconify mdi" data-icon="mdi-chevron-right"></i>
                 </span>
                 Free 30 day trial
             </li>

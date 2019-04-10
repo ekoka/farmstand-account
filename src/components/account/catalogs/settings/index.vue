@@ -17,11 +17,11 @@
                 <button class="button is-warning">Temporary deactivate</button>
                 <button class="button is-danger">
                     <span class="icon is-small">
-                        <i class="mdi mdi-alert-decagram"></i>
+                        <i class="iconify mdi" data-icon="mdi-alert-decagram"></i>
                     </span>
                     <span>Delete catalog</span>
                     <span class="icon is-small">
-                        <i class="mdi mdi-nuke"></i>
+                        <i class="iconify mdi" data-icon="mdi-nuke"></i>
                     </span>
                 </button>
             </span>
@@ -30,7 +30,7 @@
                     Show sensitive actions 
                 </span>
                 <span class="icon is-small">
-                    <i class="mdi mdi-chevron-double-right"></i>
+                    <i class="iconify mdi" data-icon="mdi-chevron-double-right"></i>
                 </span>
             </button>
             <button v-else @click="showAdvanced=false" class="button is-text">
@@ -38,7 +38,7 @@
                     Hide sensitive actions 
                 </span>
                 <span class="icon is-small">
-                    <i class="mdi mdi-chevron-double-left"></i>
+                    <i class="iconify mdi" data-icon="mdi-chevron-double-left"></i>
                 </span>
             </button>
         </div>

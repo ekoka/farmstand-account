@@ -1,7 +1,7 @@
 <template>
 <p :class="messageClass"> 
     <span v-if="val.showicon" class="icon">
-        <i class="mdi" :class="iconClass"></i>
+        <i class="iconify mdi" :data-icon="iconClass"></i>
     </span>
     {{val.msg}}
 </p> 

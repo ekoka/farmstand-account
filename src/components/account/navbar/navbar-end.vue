@@ -1,11 +1,11 @@
 <template>
 <div class="navbar-end">
     <a @click="logOut" class="navbar-item">
-        <div>
+        <div class="content">
             <span class="icon is-small">
-                <i class="mdi mdi-logout"></i>
+                <i class="iconify mdi" data-icon="mdi-logout"></i>
             </span>
-            Log out 
+            <span>Log out</span>
         </div>
     </a>
 </div><!-- navbar-end -->
