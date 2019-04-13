@@ -12,12 +12,13 @@
 </template>
 
 <script>
-import navbar from './navbar'
 import cookies from '@/utils/cookies'
 import URI from 'urijs'
 
 export default {
-    components: { navbar, },
+    components: {
+        navbar: ()=>import( './navbar'),
+    },
     mounted(){
         const watchLoggedState = ()=>{
             const loggedIn = cookies.getCookie('account_id')

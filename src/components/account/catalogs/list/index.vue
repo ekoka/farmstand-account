@@ -48,14 +48,13 @@
 import URI from 'urijs'
 import each from 'lodash/fp/each'
 import {DOMAIN_HOST_TEMPLATE} from '@/assets/js/config'
-
 import {mapActions, mapGetters} from 'vuex'
-
 import cookies from '@/utils/cookies'
-import NewCatalog from '../item'
 
 export default {
-    components: {NewCatalog},
+    components: {
+        NewCatalog: ()=>import(  '../item'),
+    },
 
     computed: {
         ...mapGetters({

@@ -165,12 +165,11 @@
 <script>
 
 import {mapActions} from 'vuex'
-import notification from '@/components/utils/messaging/notification'
-import stickycontent from '@/components/utils/sticky-content'
     
 export default {
     components: {
-        notification, stickycontent,
+        notification: ()=>import( '@/components/utils/messaging/notification'),
+        stickycontent: ()=>import( '@/components/utils/sticky-content'),
     },
     data(){
         return {

@@ -29,11 +29,9 @@
 import find from 'lodash/fp/find'
 import {mapActions} from 'vuex'
 
-import EditProfile from './edit'
-
 export default {
     components: {
-        EditProfile,
+        EditProfile: ()=>import( './edit'),
     },
 
     data(){

@@ -28,11 +28,11 @@
 <script>
 import filter from 'lodash/fp/filter'
 
-import modal from '@/components/utils/modal'
-import StripeCard from './stripe-card'
-
 export default {
-    components: {modal, StripeCard},
+    components: {
+        modal: ()=>import(  '@/components/utils/modal'),
+        StripeCard: ()=>import(  './stripe-card'),
+    },
 
     data(){
         return {

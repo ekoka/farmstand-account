@@ -127,13 +127,11 @@
 
 <script>
 import URI from 'urijs'
-import stickycontent from '@/components/utils/sticky-content'
-import notification from  '@/components/utils/messaging/notification'
 
 export default {
     components: {
-        stickycontent,
-        notification,
+        stickycontent: ()=>import(  '@/components/utils/sticky-content'),
+        notification: ()=>import(   '@/components/utils/messaging/notification'),
     },
 
     data(){

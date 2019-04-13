@@ -1,6 +1,6 @@
-import Index from '@/components/account/profile'
-import Card from '@/components/account/profile/card'
-import Edit from '@/components/account/profile/edit'
+const Index= ()=>import( '@/components/account/profile')
+const  Card= ()=>import( '@/components/account/profile/card')
+const  Edit= ()=>import( '@/components/account/profile/edit')
 
 export default {
     path: 'profile',

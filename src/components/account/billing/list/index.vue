@@ -8,13 +8,12 @@
 
 
 <script>
-import AccountStanding from './account-standing'
-import PaymentMethods from './payment-methods'
-import BillingHistory from './billing-history'
 
 export default {
     components: {
-        AccountStanding, PaymentMethods, BillingHistory
+        AccountStanding: ()=>import(  './account-standing'),
+        PaymentMethods: ()=>import(  './payment-methods'),
+        BillingHistory: ()=>import(  './billing-history'),
     },
 }
 </script>

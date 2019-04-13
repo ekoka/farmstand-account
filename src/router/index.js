@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+const Index= ()=>import('@/components')
 //routes
-import Index from '@/components'
 import Auth from './auth'
 import Account from './account'
 

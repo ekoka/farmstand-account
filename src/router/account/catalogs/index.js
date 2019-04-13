@@ -1,7 +1,7 @@
-import CatalogIndex from '@/components/account/catalogs'
-import CatalogItem from '@/components/account/catalogs/item'
-import CatalogSettings from '@/components/account/catalogs/settings'
-import CatalogList from '@/components/account/catalogs/list'
+const CatalogIndex= ()=>import( '@/components/account/catalogs')
+const  CatalogItem= ()=>import( '@/components/account/catalogs/item')
+const  CatalogSettings= ()=>import( '@/components/account/catalogs/settings')
+const  CatalogList= ()=>import( '@/components/account/catalogs/list')
 
 export default {
     path: 'catalogs',

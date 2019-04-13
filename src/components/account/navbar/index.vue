@@ -24,14 +24,12 @@
 </template>
 
 <script>
-import navbarEnd from './navbar-end'
-import navbarStart from './navbar-start'
 import {mapGetters} from 'vuex'
-
 
 export default {
     components: {
-        navbarStart, navbarEnd
+        navbarStart: ()=>import(  './navbar-start'),
+        navbarEnd: ()=>import(  './navbar-end'),
     },
     
     computed:{

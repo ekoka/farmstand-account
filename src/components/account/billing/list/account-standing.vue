@@ -30,11 +30,12 @@
 </template>
 
 <script>
-import modal from '@/components/utils/modal'
-import PaymentScreen from './payment-screen'
 
 export default{
-    components: {modal, PaymentScreen},
+    components: {
+        modal: ()=>import(  '@/components/utils/modal'),
+        PaymentScreen: ()=>import(  './payment-screen'),
+    },
 
     data(){
         return {

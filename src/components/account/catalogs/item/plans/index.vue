@@ -22,16 +22,14 @@
 
 <script>
 import {mapActions} from 'vuex'
-import Basic from './basic'
-import Standard from './standard'
-import Limited from './limited'
-
 import map from 'lodash/fp/map'
 
 export default {
     components: {
         //Binder, Shelf, Library
-        Basic, Standard, Limited
+        Basic: ()=>import(  './basic'),
+        Standard: ()=>import(  './standard'),
+        Limited: ()=>import(  './limited'),
     },
     props: ['domain'],
     data(){

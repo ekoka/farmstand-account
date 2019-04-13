@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import store from './store'
 import router from './router'
-import App from './App'
 import './assets/css/main.scss'
 
 //import GoogleAuth from 'vue-google-oauth'
@@ -57,7 +56,9 @@ new Vue({
     },
     store,
     router,
-    components: { App },
+    components: { 
+        App: import('./App')
+    },
     template: '<App/>'
 })
 

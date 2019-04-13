@@ -1,5 +1,6 @@
-import Account from '@/components/account'
-import Authorize from '@/components/account/authorize'
+const Account= ()=>import( '@/components/account')
+const Authorize= ()=>import( '@/components/account/authorize')
+
 import Catalog from './catalogs'
 import Profile from './profile'
 import Billing from './billing'

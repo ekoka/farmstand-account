@@ -1,10 +1,10 @@
 // components
-import Index from '@/components/auth'
-import Login from '@/components/auth/login'
-import Logout from '@/components/auth/logout'
-import Registration from '@/components/auth/registration'
-import PasscodeLogin from '@/components/auth/passcode-login'
-import Activate from '@/components/auth/activate'
+const Index= ()=>import( '@/components/auth')
+const Login= ()=>import( '@/components/auth/login')
+const Logout= ()=>import( '@/components/auth/logout')
+const Registration= ()=>import( '@/components/auth/registration')
+const PasscodeLogin= ()=>import( '@/components/auth/passcode-login')
+const Activate= ()=>import( '@/components/auth/activate')
 
 export default {
     name: 'AuthIndex', 

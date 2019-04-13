@@ -11,10 +11,6 @@
 </template>
 
 <script>
-import CatalogName from './CatalogName'
-import CatalogDetails from './CatalogDetails'
-import CatalogPlans from './plans'
-import Confirmation from './Confirmation'
 
 export default {
     data(){
@@ -31,10 +27,10 @@ export default {
     },
 
     components: {
-       CatalogName,
-       CatalogDetails,
-       CatalogPlans,
-       Confirmation,
+        CatalogName: ()=>import(  './CatalogName'),
+        CatalogDetails: ()=>import(  './CatalogDetails'),
+        CatalogPlans: ()=>import(  './plans'),
+        Confirmation: ()=>import(  './Confirmation'),
     },
 
     methods:{
