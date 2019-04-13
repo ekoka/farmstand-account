@@ -57,7 +57,7 @@ new Vue({
     store,
     router,
     components: { 
-        App: import('./App')
+        App: ()=>import('./App')
     },
     template: '<App/>'
 })
