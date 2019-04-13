@@ -25,7 +25,7 @@
                             </td>
                             <td></td>
                             <td class="has-text-right">
-                                <a :href="url({domain: d.data.name})"><strong>Go to catalog</strong></a>
+                                <a :href="url({domain: d.data.name, path:'/catalog'})"><strong>Go to catalog</strong></a>
                             </td>
                             <td class="has-text-right">
                                 <a :href="url({domain: d.data.name, path:'/admin'})"><strong>Go to admin</strong></a>
