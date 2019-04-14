@@ -21,7 +21,7 @@
                 <div class="field">
                     <div class="control">
                     
-                        <input class="input" type="input" v-model="password" />
+                        <input class="input" type="password" v-model="password" />
                     </div>
                 </div>
                 <div class="field">
