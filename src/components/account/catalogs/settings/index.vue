@@ -75,6 +75,24 @@
     </div>
 
     <div class="box">
+        <h5 class="subtitle is-4">Multiple languages <span class="is-size-6">(Which language will you be providing content in?) </span></h5>
+        <div>
+            <label> 
+                <span class="has-text-weight-semibold is-size-6">English: </span>
+                <input type="checkbox" name="languages" value="en" v-model="mutable.meta.languages"/>
+            </label>
+            <label> 
+                <span class="has-text-weight-semibold is-size-6">French: </span>
+                <input type="checkbox" name="languages" value="fr" v-model="mutable.meta.languages"/>
+            </label>
+            <label> 
+                <span class="has-text-weight-semibold is-size-6">Spanish: </span>
+                <input type="checkbox" name="languages" value="sp" v-model="mutable.meta.languages"/>
+            </label>
+        </div>
+    </div>
+
+    <div class="box">
         <h5 class="subtitle is-4">Privacy level</h5>
         <div>
             <label> 
@@ -147,6 +165,7 @@ export default {
                 meta:{
                     privacy: 'private',
                     access_approval: 'explicit',
+                    languages: [],
                 },
             },
         }
@@ -164,6 +183,9 @@ export default {
             }).then(resp=>{
                 this.domain = resp.data
                 this.mutable = resp.data
+                if (!this.mutable.meta.languages){
+                    this.mutable.meta.languages = []
+                }
             })
         },
         save(){
