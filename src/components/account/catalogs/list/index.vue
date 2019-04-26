@@ -80,8 +80,7 @@ export default {
     methods: {
         url({domain, path=null}){
             const urlTemplate = DOMAIN_HOST_TEMPLATE
-            const access_token = this.$store.getters['api/accessToken'].key('access_token')
-            const uri = URI.expand(urlTemplate, {domain}).search({access_token})
+            const uri = URI.expand(urlTemplate, {domain})
             uri.pathname(path)
             return uri.toString()
         },

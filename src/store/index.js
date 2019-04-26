@@ -48,29 +48,30 @@ export default new Vuex.Store({
             return 'lang=' + getters.lang
         },
     },
-    mutations: {
 
-        logOut(state){
-            const domain = URI(PRODUCTLIST_INDEX).domain()
-            cookies.removeCookie('account_id', '/', domain)
-            cookies.removeCookie('id_token', '/', domain)
-        },
-    },
+    mutations: {},
 
     actions: {
-        logIn({getters, state}){
+        logIn({getters, state, dispatch}){
             const domain = URI(PRODUCTLIST_INDEX).domain()
-            cookies.setCookie (
-                'account_id', getters['api/account'].data.account_id, 
-                Infinity, '/', domain)
-            cookies.setCookie (
-                'id_token', state.api.idToken,
-                Infinity, '/', domain)
+            //cookies.setCookie (
+            //    'account_id', getters['api/account'].data.account_id, 
+            //    Infinity, '/', domain)
+            //cookies.setCookie (
+            //    'id_token', state.api.idToken,
+            //    Infinity, '/', domain)
+            //
+            //
         },
 
-        clear({dispatch, commit}){
-            dispatch('api/resetApi').then(()=>{
-                commit('logOut')
+        logOut({state, dispatch}){
+            const indexUrl = URI(state.PRODUCTLIST_INDEX)
+            const domain = indexUrl.domain()
+            cookies.removeCookie('account_id', '/', domain)
+            cookies.removeCookie('idToken', '/', domain)
+            cookies.removeCookie('id_token', '/', domain)
+            return dispatch('api/resetApi').then(()=>{
+                window.location.href = indexUrl.path('/logout').href()
             })
         },
     },

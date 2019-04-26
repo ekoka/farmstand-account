@@ -1,5 +1,7 @@
 import {HAL} from '@/utils/hal'
 import {parseJwt} from '@/utils/jwt'
+import cookies from '@/utils/cookies'
+import URI from 'urijs'
 
 export default {
     state: {
@@ -26,15 +28,17 @@ export default {
 
     mutations: {
         // when sending access_token via header
-        setIdToken(state, {idToken}){
-            state.idToken = HAL(idToken).key('id_token')
+        setIdToken(state, {token}){
+            state.idToken = token 
+        },
+        setIdTokenCookie(state, {token, domain}){
+            cookies.setCookie ('idToken', token, Infinity, '/', domain)
         },
         setAccessToken(state, {token}){
             const accessToken = {
                 token: HAL(token).key('token'), 
             }
             const payload = accessToken.token.split('.')[1]
-            console.log(payload)
             accessToken.payload = parseJwt(payload)
             state.accessToken = accessToken
         },
@@ -48,7 +52,7 @@ export default {
 
     actions: {
         postSignin({getters}, {data}){
-            let url = getters.root.url('signins')
+            const url = getters.root.url('signins')
             return getters.http({
                 url, 
                 data,
@@ -70,7 +74,7 @@ export default {
         },
 
         postPaymentSource({getters, dispatch}, {data}){
-            let url = getters.account.url('payment_sources')
+            const url = getters.account.url('payment_sources')
             return getters.http({
                 url, method: 'post', data, auth:true
             }).then(response=>{
@@ -79,7 +83,7 @@ export default {
         },
 
         getPaymentSources({getters, dispatch}){
-            let url = getters.account.url('payment_sources')
+            const url = getters.account.url('payment_sources')
             return getters.http({
                 url, auth:true
             }).then(response=>{
@@ -88,7 +92,7 @@ export default {
         },
 
         deletePaymentSource({getters}, {source_id}){
-            let url = getters.account.url('payment_source', {source_id})
+            const url = getters.account.url('payment_source', {source_id})
             return getters.http({
                 url, auth:true, method:'delete', 
             }).then(response=>{
@@ -106,23 +110,24 @@ export default {
             })
         },
 
-        postIdToken({state, getters, commit, dispatch}, {provider, token}){
+        postIdToken({rootState, state, getters, commit, dispatch}, {provider, token}){
             const url = getters.root.url('id_token')
             return getters.http({
                 data: {provider, token},
                 method: 'post',
                 url,
-            // when going through httponly cookie
-            //}).then(response=>{
-            //    response = HAL(response.data)
-            //    commit('setAccountUrl', {url: response.url('account')})
-            //    return response
-            //})
-            // when using access_token in header
             }).then(response => {
-                commit('setIdToken', {idToken: response.data})
-                return state.idToken
+
+                const domain = URI(rootState.PRODUCTLIST_INDEX).domain()
+                commit('setIdToken', {token: response.data.token})
+                commit('setIdTokenCookie', {token: response.data.token, domain})
             })
+        },
+
+        syncIdToken({commit}){
+            // cookie is source of truth during sync
+            const token = cookies.getCookie('idToken')
+            commit('setIdToken', {token})
         },
 
         postAccessToken({getters, commit, dispatch, state}){
@@ -133,13 +138,6 @@ export default {
                 method: 'post',
                 url,
                 headers:authHeaders,
-            // when going through httponly cookie
-            //}).then(response=>{
-            //    response = HAL(response.data)
-            //    commit('setAccountUrl', {url: response.url('account')})
-            //    return response
-            //})
-            // when using access_token in header
             }).then(response => {
                 commit('setAccessToken', {token: response.data})
                 return state.accessToken

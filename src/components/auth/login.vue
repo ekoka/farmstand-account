@@ -132,7 +132,7 @@ export default {
                     return this.postAccessToken()
                 }).then(()=>{
                     return this.getAccount()
-                }).then(account=>{
+                }).then(()=>{
                     return this.logIn()
                 }).then(()=>{
                     this.$router.push({name: 'Account'})

@@ -18,20 +18,8 @@ import cookies from '@/utils/cookies'
 export default {
     methods:{
         logOut(){
-            // first disable the access token
-            this.$store.dispatch('api/deleteAccessToken').then(()=>{
-                // then remove the cookie
-                this.$store.commit('logOut')
-            })
+            this.$store.dispatch('logOut')
         },
-        //logOut: async function(){
-        //    try {
-        //        await this.$store.dispatch('api/deleteAccessToken')
-        //    }catch(e){
-        //    }
-        //    this.$store.commit('api/clearState')
-        //    this.$store.commit('unsetLoggedIn')
-        //},
     }
 }
 

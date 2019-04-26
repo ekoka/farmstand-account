@@ -91,7 +91,7 @@ const API = {
         },
 
         getPlans({getters}){
-            let url = getters.root.url('plans')
+            const url = getters.root.url('plans')
             getters.http
             return getters.http({
                 url,

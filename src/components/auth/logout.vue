@@ -1,7 +1,4 @@
-<template>
-<div></div>
-</template>
-
+<template></template>
 <script>
 export default {
 
@@ -29,8 +26,8 @@ export default {
                 //await gapi.auth2.getAuthInstance().signOut()
                 // forces prompt to choose a google account
                 await gapi.auth2.getAuthInstance().disconnect()
-                window.location.href = this.$store.state['PRODUCTLIST_INDEX']
             }
+            window.location.href = this.$store.state.PRODUCTLIST_INDEX
         },
     },
 

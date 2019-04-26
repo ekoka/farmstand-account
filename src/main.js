@@ -4,6 +4,7 @@ import Vue from 'vue'
 import store from './store'
 import router from './router'
 import './assets/css/main.scss'
+import cookies from '@/utils/cookies'
 
 //import GoogleAuth from 'vue-google-oauth'
 //import {GoogleClientId} from './assets/js/config'
@@ -27,10 +28,6 @@ store.$eventBus = EventBus
 
 Vue.config.productionTip = false
 Vue.prototype.$jsoncopy = obj=> JSON.parse(JSON.stringify(obj))
-Vue.prototype.cmpalias = function(cmpName, alias) {
-    /* because sometimes global components names are too damn long! */
-    this.$options.components[alias] = this.$options.components[cmpName]
-}
 
 /* eslint-disable no-new */
 const VERSION = '1'
@@ -38,8 +35,8 @@ new Vue({
     el: '#app',
     mounted(){
         this.versionReset()
-        //localStorage.clear()
         this.$store.dispatch('api/getRoot')
+        this.monitorIdTokenCookie()
     },
     methods:{
         versionReset(){
@@ -53,7 +50,24 @@ new Vue({
             //this.$store.commit('inquiry/resetInquiry')
             localStorage.setItem('VERSION', VERSION)
         },
+
+        monitorIdTokenCookie(){
+            // synchronize id_token in cookie with idToken in localStorage
+            const idToken = cookies.getCookie('idToken')
+            if(idToken!=this.$store.state.api.idToken){
+                // change of state
+                this.$store.dispatch('api/syncIdToken')
+            }
+            //if(!idToken){
+            //    this.$store.dispatch('logOut')
+            //}
+            setTimeout(this.monitorIdTokenCookie, 2000)
+        },
+
+
     },
+
+
     store,
     router,
     components: { 
@@ -64,5 +78,5 @@ new Vue({
 
 
 window.onerror = function(message, source, lineno, colno, error) {
-  console.log('Exception: ', error)
+    console.log('Exception: ', error)
 }
