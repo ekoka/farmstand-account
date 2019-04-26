@@ -1,10 +1,12 @@
 import {HAL} from '@/utils/hal'
+import {parseJwt} from '@/utils/jwt'
 
 export default {
     state: {
         // when sending access_token via httponly cookie 
         //accountUrl: null, 
         // when sending access_token via headers 
+        idToken: null,
         accessToken: null,
         account: null,
         domain: null,
@@ -14,20 +16,26 @@ export default {
         account(state){
             return HAL(state.account)
         },
-        accessToken(state){
-            return HAL(state.accessToken)
-        },
         domain(state){
             return HAL(state.domain)
         },
         accountUrl(state){
-            return HAL(state.accessToken).url('account')
+            return state.accessToken.payload.account_url
         },
     },
 
     mutations: {
         // when sending access_token via header
-        setAccessToken(state, {accessToken}){
+        setIdToken(state, {idToken}){
+            state.idToken = HAL(idToken).key('id_token')
+        },
+        setAccessToken(state, {token}){
+            const accessToken = {
+                token: HAL(token).key('token'), 
+            }
+            const payload = accessToken.token.split('.')[1]
+            console.log(payload)
+            accessToken.payload = parseJwt(payload)
             state.accessToken = accessToken
         },
         setAccount(state, {account}){
@@ -36,10 +44,6 @@ export default {
         setDomain(state, {domain}){
             state.domain = domain
         },
-        // when sending access_token via httponly cookie
-        //setAccountUrl(state, {url}){
-        //    state.accountUrl = url
-        //},
     },
 
     actions: {
@@ -102,13 +106,12 @@ export default {
             })
         },
 
-        postAccessToken({getters, commit, dispatch}, {provider, token}){
-            const url = getters.root.url('access_token')
+        postIdToken({state, getters, commit, dispatch}, {provider, token}){
+            const url = getters.root.url('id_token')
             return getters.http({
                 data: {provider, token},
                 method: 'post',
                 url,
-                auth:true,
             // when going through httponly cookie
             //}).then(response=>{
             //    response = HAL(response.data)
@@ -117,8 +120,29 @@ export default {
             //})
             // when using access_token in header
             }).then(response => {
-                commit('setAccessToken', {accessToken: response.data})
-                return getters.accessToken
+                commit('setIdToken', {idToken: response.data})
+                return state.idToken
+            })
+        },
+
+        postAccessToken({getters, commit, dispatch, state}){
+            const url = getters.root.url('access_token')
+            const authHeaders = {'Authorization': 'Bearer ' + state.idToken}
+            return getters.http({
+                data: {},
+                method: 'post',
+                url,
+                headers:authHeaders,
+            // when going through httponly cookie
+            //}).then(response=>{
+            //    response = HAL(response.data)
+            //    commit('setAccountUrl', {url: response.url('account')})
+            //    return response
+            //})
+            // when using access_token in header
+            }).then(response => {
+                commit('setAccessToken', {token: response.data})
+                return state.accessToken
             })
         },
 
@@ -154,7 +178,6 @@ export default {
         getDomainNameCheck({commit, getters}, {domain}={}){
             const url = getters.root.url(
                 'domain_name_check', null, {q:domain})
-            console.log(url)
             return getters.http({
                 url,
             }).then(response=>{

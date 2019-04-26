@@ -126,12 +126,15 @@ export default {
                 // TODO: we should probably display an error message
                 // saying that there's no associated Productlist account
                 // for the given Google account.
-                return this.postAccessToken({
+                return this.postIdToken({
                     token, provider:'google'
-                }).then(accessToken=>{
+                }).then(()=>{
+                    return this.postAccessToken()
+                }).then(()=>{
                     return this.getAccount()
                 }).then(account=>{
-                    this.$store.commit('logIn', {account:account.data})
+                    return this.logIn()
+                }).then(()=>{
                     this.$router.push({name: 'Account'})
                 })
             })
@@ -152,12 +155,13 @@ export default {
                 password:this.password,
                 email:this.email,
             }
-            this.postAccessToken({
+            this.postIdToken({
                 token, provider: 'productlist'
-            }).then(response=>{
+            }).then(()=>{
                 return this.getAccount()
             }).then(account=>{
-                this.$store.commit('logIn', {account:account.data})
+                return this.logIn()
+            }).then(()=>{
                 return this.$router.push({name: 'Account'})
             })
         },
@@ -167,8 +171,9 @@ export default {
             postSignin: 'api/postSignin',
             getAccount: 'api/getAccount',
             postAccessToken: 'api/postAccessToken',
+            postIdToken: 'api/postIdToken',
+            logIn: 'logIn',
         })
-
     },
 }
 </script>

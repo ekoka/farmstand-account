@@ -162,9 +162,9 @@ export default {
                 const token = googleUser.getAuthResponse().id_token
                 return this.postAccount({
                     token, provider:'google'
-                }).then(response=>{
-                    return this.postAccessToken({token, provider:'google'})
-                }).then(accessToken=>{
+                }).then(()=>{
+                    return this.postIdToken({token, provider:'google'})
+                }).then(()=>{
                     return this.getAccount()
                 }).then(account=>{
                     this.$store.commit('logIn', {account:account.data})
@@ -178,7 +178,7 @@ export default {
             postSignin: 'api/postSignin',
             gettAccount: 'api/getAccount',
             getTenant: 'api/getTenant',
-            postAccessToken: 'api/postAccessToken',
+            postIdToken: 'api/postIdToken',
         })
     },
 

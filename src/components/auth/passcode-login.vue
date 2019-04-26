@@ -10,13 +10,14 @@ export default {
         // get passcode from url
         const {signin_id, passcode, lang} = this.$route.query 
         const token = {passcode, signin_id}
-        this.postAccessToken({
+        this.postIdToken({
             provider:'productlist',
             token,
-        }).then(response=>{
+        }).then(()=>{
             return this.getAccount()
-        }).then(account=>{
-            this.$store.commit('logIn', {account:account.data})
+        }).then(()=>{
+            return this.logIn()
+        }).then(()=>{
             return this.$router.push({name: 'Account'})
         })
 
@@ -28,7 +29,8 @@ export default {
     methods: {
         ...mapActions({
             getAccount: 'api/getAccount',
-            postAccessToken: 'api/postAccessToken',
+            postIdToken: 'api/postIdToken',
+            logIn: 'logIn',
         }),
     }
 }

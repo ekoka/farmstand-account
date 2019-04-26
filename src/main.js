@@ -52,7 +52,7 @@ new Vue({
             this.$store.dispatch('api/resetApi')
             //this.$store.commit('inquiry/resetInquiry')
             localStorage.setItem('VERSION', VERSION)
-        }
+        },
     },
     store,
     router,

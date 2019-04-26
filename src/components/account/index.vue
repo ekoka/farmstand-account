@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="ready">
     <navbar/>
     <div class="section">
         <div class="columns">
@@ -16,12 +16,26 @@ import cookies from '@/utils/cookies'
 import URI from 'urijs'
 
 export default {
+    data(){
+        return {
+            ready: false,
+        }
+    },
+
     components: {
         navbar: ()=>import( './navbar'),
     },
     mounted(){
-        const watchLoggedState = ()=>{
-            const loggedIn = cookies.getCookie('account_id')
+        this.$store.dispatch('api/postAccessToken').then(()=>{
+            this.ready = true
+        })
+        this.watchIdToken()
+        this.watchAccessToken()
+    },
+    methods:{
+
+        watchIdToken(){
+            const loggedIn = cookies.getCookie('id_token')
             //if(!this.$store.state['loggedIn']){
             if(!loggedIn){
                 // clear the state again, just in case the cookie was
@@ -31,9 +45,20 @@ export default {
                     window.location.href = index.path('/logout').href()
                 })
             }
-            setTimeout(watchLoggedState, 2000)
-        }
-        watchLoggedState()
+            setTimeout(this.watchIdToken, 2000)
+        },
+
+        watchAccessToken(){
+            const delay = 300 // 5 minutes
+            if (cookies.getCookies('id_token')){
+                const accessToken = this.$store.state.accessToken
+                const exp = Date.now()/1000 - delay*2 // 10 minutes before expiry
+                if (exp < accessToken.payload.exp){
+                    this.$store.dispatch('api/postAccessToken')
+                }
+            }
+            setTimeout(this.watchAccessToken, delay*1000)
+        },
     },
 }
 </script>

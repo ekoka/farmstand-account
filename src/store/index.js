@@ -49,34 +49,32 @@ export default new Vuex.Store({
         },
     },
     mutations: {
-        logIn(state, {account}){
-            //state.loggedIn = account.account_id
-            //createCookie('account_id', account.account_id, 365)
-            const domain = URI(PRODUCTLIST_INDEX).domain()
-            cookies.setCookie (
-                'account_id', 
-                account.account_id, 
-                Infinity, 
-                '/', 
-                domain)
-        },
-        //unsetLoggedIn(state){
-        //    state.loggedIn = false
-        //    //cookies.removeCookie('account_id', '/', 'productlist.local')
-        //},
 
         logOut(state){
             const domain = URI(PRODUCTLIST_INDEX).domain()
             cookies.removeCookie('account_id', '/', domain)
+            cookies.removeCookie('id_token', '/', domain)
         },
     },
+
     actions: {
+        logIn({getters, state}){
+            const domain = URI(PRODUCTLIST_INDEX).domain()
+            cookies.setCookie (
+                'account_id', getters['api/account'].data.account_id, 
+                Infinity, '/', domain)
+            cookies.setCookie (
+                'id_token', state.api.idToken,
+                Infinity, '/', domain)
+        },
+
         clear({dispatch, commit}){
             dispatch('api/resetApi').then(()=>{
                 commit('logOut')
             })
         },
     },
+
     plugins: [createPersistedState({
         //key: 'productlist-admin',
         storage: localStorage,
