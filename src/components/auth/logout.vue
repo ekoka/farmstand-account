@@ -1,4 +1,4 @@
-<template></template>
+<template><div></div></template>
 <script>
 export default {
 
@@ -11,7 +11,9 @@ export default {
     watch: {
         gapiReady: {
             handler(v){
-                this.logout()
+                if(v){
+                    this.logout()
+                }
             },
             immediate: true,
         }
@@ -20,16 +22,15 @@ export default {
     methods:{
 
         logout: async function(){
-            if (this.gapiReady){
-                // on next log in user will automatically be logged in
-                // using the Google account she's currently connected to.
-                //await gapi.auth2.getAuthInstance().signOut()
-                // forces prompt to choose a google account
+            // on next log in user will automatically be logged in
+            // using the Google account she's currently connected to.
+            //await gapi.auth2.getAuthInstance().signOut()
+            // forces prompt to choose a google account
+            try{
                 await gapi.auth2.getAuthInstance().disconnect()
-                // keep redirect call inside so that it gets a
-                // a chance to be called after the disconnect()
-                window.location.href = this.$store.state.PRODUCTLIST_INDEX
+            } catch(e){
             }
+            window.location.href = this.$store.state.PRODUCTLIST_INDEX
         },
     },
 
