@@ -26,8 +26,10 @@ export default {
                 //await gapi.auth2.getAuthInstance().signOut()
                 // forces prompt to choose a google account
                 await gapi.auth2.getAuthInstance().disconnect()
+                // keep redirect call inside so that it gets a
+                // a chance to be called after the disconnect()
+                window.location.href = this.$store.state.PRODUCTLIST_INDEX
             }
-            window.location.href = this.$store.state.PRODUCTLIST_INDEX
         },
     },
 
