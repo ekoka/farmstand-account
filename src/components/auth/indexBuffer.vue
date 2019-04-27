@@ -38,9 +38,14 @@
             </nav>
         </div>
         <div class="hero-body">
-            <router-view />
+            <router-view :gapiReady="gapiReady" />
         </div>
         <div class="hero-foot"></div>
     </div>
 </section>
 </template>
+<script>
+export default {
+    props: ['gapiReady']
+}
+</script>
