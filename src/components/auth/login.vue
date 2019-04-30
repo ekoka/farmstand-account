@@ -56,6 +56,7 @@
 
 <script>
 import {mapActions} from 'vuex'
+import cookies from '@/utils/cookies'
 
 export default {
     props: ['gapiReady'],
@@ -133,8 +134,9 @@ export default {
                 }).then(()=>{
                     return this.getAccount()
                 }).then(()=>{
-                    return this.logIn()
-                }).then(()=>{
+                    if(this.afterLogin()){
+                        return
+                    }
                     this.$router.push({name: 'Account'})
                 })
             })
@@ -159,11 +161,24 @@ export default {
                 token, provider: 'productlist'
             }).then(()=>{
                 return this.getAccount()
-            }).then(account=>{
-                return this.logIn()
             }).then(()=>{
+                if(this.afterLogin()){
+                    return
+                }
                 return this.$router.push({name: 'Account'})
             })
+        },
+
+        afterLogin(){
+            const key = 'afterLogin'
+            const cookie = cookies.getCookie(key)
+            if(cookie){
+                const scope = this.$store.getters.PRODUCTLIST_URI.domain()
+                cookies.removeCookie(key, '/', scope)
+                const action = JSON.parse(atob(cookie))
+                this.$router.push(action)
+                return true
+            }
         },
 
 
@@ -172,7 +187,6 @@ export default {
             getAccount: 'api/getAccount',
             postAccessToken: 'api/postAccessToken',
             postIdToken: 'api/postIdToken',
-            logIn: 'logIn',
         })
     },
 }

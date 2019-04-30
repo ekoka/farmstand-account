@@ -1,12 +1,11 @@
-<template><div></div></template>
+<template>
+<div>
+</div>
+</template>
 <script>
 export default {
 
     props:['gapiReady'],
-
-    mounted(){
-        this.logout()
-    },
 
     watch: {
         gapiReady: {
@@ -21,19 +20,14 @@ export default {
 
     methods:{
 
-        logout: async function(){
+        logout(){
             // on next log in user will automatically be logged in
             // using the Google account she's currently connected to.
             //await gapi.auth2.getAuthInstance().signOut()
             // forces prompt to choose a google account
-            try{
-                await gapi.auth2.getAuthInstance().disconnect()
-            } catch(e){
-            }
+            gapi.auth2.getAuthInstance().disconnect()
             window.location.href = this.$store.state.PRODUCTLIST_INDEX
         },
     },
-
-
 }
 </script>

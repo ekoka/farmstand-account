@@ -130,11 +130,11 @@ export default {
             commit('setIdToken', {token})
         },
 
-        postAccessToken({getters, commit, dispatch, state}){
+        postAccessToken({getters, commit, dispatch, state}, {domain}={domain:null}){
             const url = getters.root.url('access_token')
             const authHeaders = {'Authorization': 'Bearer ' + state.idToken}
             return getters.http({
-                data: {},
+                data: {domain},
                 method: 'post',
                 url,
                 headers:authHeaders,

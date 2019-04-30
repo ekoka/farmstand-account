@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const Index= ()=>import('@/components')
+const Index = ()=>import('@/components')
+const Access = ()=>import('@/components/access')
 //routes
 import Auth from './auth'
 import Account from './account'
@@ -15,6 +16,11 @@ export default new Router({
             name: 'Index', 
             path: '/',
             component: Index,
+        },
+        {
+            name: 'Access', 
+            path: '/access',
+            component: Access,
         },
         Auth,
         Account,

@@ -17,7 +17,6 @@ export default {
     },
 
     mounted() {
-        console.log('gapi included')
         const googleAuthScript = document.createElement('script')
         const googleAuthScriptUrl = 'https://apis.google.com/js/platform.js'
         googleAuthScript.setAttribute('src', googleAuthScriptUrl)

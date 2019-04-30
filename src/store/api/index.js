@@ -1,4 +1,5 @@
 import axios from 'axios'
+import upperFirst from 'lodash/fp/upperFirst'
 import {HAL} from '@/utils/hal'
 import {API_ROOT} from '@/assets/js/config'
 
@@ -65,6 +66,13 @@ const API = {
                 return HAL(state.root)
             }
         },
+
+        publicRoot(state){
+            if(state.publicRoot){
+                return HAL(state.publicRoot)
+            }
+        },
+
         ...accounts.getters,
     },
 
@@ -73,6 +81,11 @@ const API = {
         setRoot(state, {root}){
             state.root = root
         },
+
+        setPublicRoot(state, {publicRoot}){
+            state.publicRoot = publicRoot
+        },
+
         ...accounts.mutations,
 
         resetApi(state){
@@ -88,6 +101,36 @@ const API = {
                 commit('setRoot', {root:response.data})
                 return HAL(response.data)
             })
+        },
+
+        getPublicRoot({getters, commit, dispatch}, {domain}){
+            return dispatch('getResource', {resource:'root'}).then(root=>{
+                const url = root.url('public_root', {domain})
+                return getters.http({url}).then(response=>{
+                    commit('setPublicRoot', {publicRoot: response.data})
+                    return HAL(response.data)
+                })
+            })
+        },
+
+        getPublicDomain({getters, dispatch}, {domain}){
+            return dispatch('getResource', {
+                resource:'publicRoot', params:{domain}
+            }).then(publicRoot=>{
+                const url = publicRoot.url('public_domain', {domain})
+                console.log(url)
+                return getters.http({url}).then(response=>{
+                    return HAL(response.data)
+                })
+            })
+        },
+
+        getResource({getters, commit, dispatch}, {resource, params=null}){
+            if(getters[resource]){
+                return getters[resource]
+            }
+            const capitalized = upperFirst(resource)
+            return dispatch('get'+capitalized, params)
         },
 
         getPlans({getters}){

@@ -24,9 +24,6 @@ export default new Vuex.Store({
         PRODUCTLIST_INDEX,
     },
     getters: {
-        DOMAIN_URI(state, getters){
-            return URI.expand(DOMAIN_HOST_TEMPLATE, getters.subdomain)
-        },
         API_ROOT_URI(state, getters){
             return URI(API_ROOT)
         },
@@ -53,7 +50,7 @@ export default new Vuex.Store({
 
     actions: {
         logIn({getters, state, dispatch}){
-            const domain = URI(PRODUCTLIST_INDEX).domain()
+            const domain = getters.PRODUCTLIST_URI.domain()
             //cookies.setCookie (
             //    'account_id', getters['api/account'].data.account_id, 
             //    Infinity, '/', domain)
