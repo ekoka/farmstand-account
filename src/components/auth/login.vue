@@ -160,6 +160,8 @@ export default {
             this.postIdToken({
                 token, provider: 'productlist'
             }).then(()=>{
+                return this.postAccessToken()
+            }).then(()=>{
                 return this.getAccount()
             }).then(()=>{
                 if(this.afterLogin()){

@@ -144,6 +144,18 @@ export default {
             })
         },
 
+        postAccessRequest({getters}, {data}){
+            const url = getters.root.url('access_requests')
+            return getters.http({
+                data,
+                method: 'post',
+                url,
+                auth: true,
+            }).then(response=>{
+                return HAL(response.data)
+            })
+        },
+
         deleteAccessToken({getters}){
             let url = getters.root.url('access_token')
             return getters.http({
