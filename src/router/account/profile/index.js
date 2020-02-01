@@ -1,6 +1,6 @@
 const Index= ()=>import( '@/components/account/profile')
 const  Card= ()=>import( '@/components/account/profile/card')
-const  Edit= ()=>import( '@/components/account/profile/edit')
+const  EditProfile= ()=>import( '@/components/account/profile/edit-profile')
 
 export default {
     path: 'profile',
@@ -13,8 +13,8 @@ export default {
         },
         {
             name: 'EditProfile',
-            component: Edit,
-            path: 'edit',
+            component: EditProfile,
+            path: 'edit-profile',
         },
     ],
 }

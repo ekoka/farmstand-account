@@ -63,8 +63,6 @@ new Vue({
             //}
             setTimeout(this.monitorIdTokenCookie, 2000)
         },
-
-
     },
 
 

@@ -18,6 +18,7 @@ export default {
     data(){
         return {
             loggedIn: false,
+            refreshed: false,
             ready: false,
         }
     },
@@ -46,21 +47,23 @@ export default {
         },
 
         monitorAccessToken(){
-            const delay = 300 // 5 minutes
+            const delay = 5 * 60 * 1000 // 5 minutes
             if (this.loggedIn){
                 const accessToken = this.$store.state.api.accessToken
                 const exp = Date.now()/1000 + delay*2 // 10 minutes before expiry
-                if (exp >= accessToken.payload.exp){
-                    this.$store.dispatch('api/postAccessToken').then(()=>{
-                        // we keep monitoring as long as we obtain a good access token
-                        setTimeout(this.monitorAccessToken, delay*1000)
-                    }).catch(error=>{
+                if (exp>=accessToken.payload.exp){ // about to expire
+                    // refresh access token
+                    this.$store.dispatch('api/postAccessToken').catch(error=>{
                         if (error.response.status==401){ 
                             // id_token is not valid anymore
-                            return
+                            this.$store.dispatch('api/deleteAccessToken')
                         }
+                        return
                     })
                 }
+                // try again in 5 minutes
+                // we keep monitoring as long as we obtain good access tokens
+                setTimeout(this.monitorAccessToken, delay)
             }
         },
     },

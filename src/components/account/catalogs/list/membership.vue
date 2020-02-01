@@ -40,6 +40,9 @@
 import URI from 'urijs'
 import map from 'lodash/fp/map'
 import flow from 'lodash/fp/flow'
+import includes from 'lodash/fp/includes'
+import compose from 'lodash/fp/compose'
+import toPairs from 'lodash/fp/toPairs'
 import filter from 'lodash/fp/filter'
 import {DOMAIN_HOST_TEMPLATE} from '@/assets/js/config'
 import {mapActions, mapGetters} from 'vuex'
@@ -65,14 +68,24 @@ export default {
     mounted(){
         //console.log(cookies.getCookie('account_id'))
         this.getDomains().then(resp=>{
-            const mapResource = map(d=>{
-                return d.resource
-            })
-            const filterAdmin = filter(d=>{
-                return d.role=='user'
-            })
-            this.domains = flow(mapResource, filterAdmin)(
-                resp.embedded('domains'))
+            const domains = compose(
+                map(([d,r])=>{
+                    return d
+                }),
+                filter(([d, r])=>{
+                    return r=='user'
+                }),
+                toPairs,
+            )(resp.data.roles)
+
+            this.domains = compose(
+                map(domain=>{
+                    return domain.resource
+                }),
+                filter(domain=>{
+                    return includes(domain.data.name, domains)
+                }),
+            )(resp.embedded('domains'))
         })
     },
 
