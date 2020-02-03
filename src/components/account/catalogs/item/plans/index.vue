@@ -9,14 +9,31 @@
         <Limited class="column is-flex" @click.native="selectPlan(plans[2])" 
             :plan="plans[2]" :selected="data.plan_id" />
     </div>
-    <div class="field">
-        <button class="is-link is-outlined button" @click="prev">
-           Back 
-        </button>
-        <button class="is-link button" @click="next">
-            Continue
-        </button>
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <div class="field">
+                    <button class="is-link is-outlined button" @click="prev">
+                    Back
+                    </button>
+                </div>
+            </div>
+            <div class="level-item">
+                <div class="field">
+                    <button class="is-link button" 
+                        :disabled="!data.plan_id"
+                        @click="next">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+            </div>
+        </div>
     </div>
+
 </div>
 </template>
 
@@ -35,7 +52,7 @@ export default {
     data(){
         let data = this.$jsoncopy(this.domain)
         if(!data.plan_id){
-            data.plan_id = 2
+            data.plan_id = null
         }
         return { data, plans:null, selected: data.plan_id}
     },

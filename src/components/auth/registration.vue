@@ -165,15 +165,18 @@ export default {
                 }).then(()=>{
                     return this.postIdToken({token, provider:'google'})
                 }).then(()=>{
+                    return this.postAccessToken()
+                }).then(()=>{
                     return this.getAccount()
                 }).then(account=>{
-                    this.$store.commit('logIn', {account:account.data})
+                    //this.$store.commit('logIn', {account:account.data})
                     this.$router.push({name: 'Account'})
                 })
             })
         },
 
         ...mapActions({
+            postAccessToken: 'api/postAccessToken',
             postAccount: 'api/postAccount',
             postSignin: 'api/postSignin',
             getAccount: 'api/getAccount',

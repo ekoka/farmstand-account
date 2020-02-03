@@ -1,11 +1,9 @@
 <template>
 <div>
-    <h3 class="title is-3">You're about to create a <em>Small Catalog</em> that will be hosted at https://{{domain.name}}.simpleb2b.io/. </h3>
+    <h3 class="title is-3">You're about to create a <em>Productlist Catalog</em> that will be hosted at https://{{domain.name}}.productlist.io/. </h3>
         
-    <h3 class="title is-4">Additional charges of CAD $20.00 will be billed to your account each month (partial month billed proportionally).</h3>
-    <h3 class="title is-4">The catalog has a 20 product capacity.</h3>
-    {{domain}}
-
+    <h3 class="title is-4">Additional charges of CAD $50.00 will be billed to your account each month (partial month billed proportionally).</h3>
+    <h3 class="title is-4">The catalog can store and showcase 200 products.</h3>
     <div class="level">
         <div class="level-left">
             <div class="level-item">

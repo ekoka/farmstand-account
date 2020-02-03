@@ -25,19 +25,25 @@
     </div><!-- field -->
     <validationMsg :showicon="true" v-if="search.name!==null" :val="nameMsg"> 
     </validationMsg>
-    <div>
-        <router-link :to="{name:'CatalogList'}" class="button is-outlined">
-            Cancel
-        </router-link>
-        <button 
-            v-if="validLength"
-            class="is-link button" 
-            :class="{'is-loading': nameIsChanging}"
-            @click="next"
-            :disabled="!validName"
-            >
-            Continue
-        </button>
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <router-link :to="{name:'CatalogList'}" class="button is-outlined">
+                    Cancel
+                </router-link>
+            </div>
+            <div class="level-item">
+                <button 
+                    v-if="validLength"
+                    class="is-link button" 
+                    :class="{'is-loading': nameIsChanging}"
+                    @click="next"
+                    :disabled="!validName"
+                    >
+                    Continue
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 </template>

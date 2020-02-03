@@ -14,9 +14,9 @@ export default {
             provider:'productlist',
             token,
         }).then(()=>{
-            return this.getAccount()
+            return this.postAccessToken()
         }).then(()=>{
-            return this.logIn()
+            return this.getAccount()
         }).then(()=>{
             return this.$router.push({name: 'Account'})
         }).catch(e=>{
@@ -32,6 +32,7 @@ export default {
         ...mapActions({
             getAccount: 'api/getAccount',
             postIdToken: 'api/postIdToken',
+            postAccessToken: 'api/postAccessToken',
             logIn: 'logIn',
         }),
     }

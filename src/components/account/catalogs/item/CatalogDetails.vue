@@ -17,13 +17,23 @@
             <input class="input" v-model="data.details.description"/>
         </div>
     </div>
-    <div class="field">
-        <button class="is-link is-outlined button" @click="prev">
-           Back 
-        </button>
-        <button class="is-link button" @click="next">
-            Continue
-        </button>
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <div class="field">
+                    <button class="is-link is-outlined button" @click="prev">
+                    Back 
+                    </button>
+                </div>
+            </div>
+            <div class="level-item">
+                <div class="field">
+                    <button class="is-link button" @click="next">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </template>

@@ -20,7 +20,7 @@ export default {
             cmpSequence: [
                 'CatalogName',
                 'CatalogPlans',
-                'CatalogDetails',
+                //'CatalogDetails',
                 'Confirmation',
             ],
         }
