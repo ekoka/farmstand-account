@@ -110,7 +110,7 @@ export default {
             })
         },
 
-        postIdToken({rootState, state, getters, commit, dispatch}, {provider, token}){
+        postIdToken({rootState, getters, commit}, {provider, token}){
             const url = getters.root.url('id_token')
             return getters.http({
                 data: {provider, token},

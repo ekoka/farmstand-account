@@ -176,7 +176,7 @@ export default {
         ...mapActions({
             postAccount: 'api/postAccount',
             postSignin: 'api/postSignin',
-            gettAccount: 'api/getAccount',
+            getAccount: 'api/getAccount',
             getTenant: 'api/getTenant',
             postIdToken: 'api/postIdToken',
         })

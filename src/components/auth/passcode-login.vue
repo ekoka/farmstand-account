@@ -19,6 +19,8 @@ export default {
             return this.logIn()
         }).then(()=>{
             return this.$router.push({name: 'Account'})
+        }).catch(e=>{
+            console.log(e)
         })
 
         //TODO: set lang
