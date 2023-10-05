@@ -2,16 +2,13 @@
 <div class="container">
     <div class="columns">
         <div class="column">
-            <div class="content">
-                <div ref="googlebtn" id="google-login-btn"></div>
-            </div>
-            
+
             <div class="box">
                 <div> {{message}} </div>
                 <p class="subtitle is-3">Or register with your email</p>
                 <div class="field">
                     <label class="label">
-                        Email: 
+                        Email:
                     </label>
 
                     <div class="control">
@@ -29,7 +26,7 @@
                 </div>
                 <div class="field">
                     <label class="label">
-                        First name (optional): 
+                        First name (optional):
                     </label>
 
                     <div class="control">
@@ -46,9 +43,9 @@
                     </div>
                 </div>
                 <div class="control">
-                    <button class="button is-warning is-size-4" 
+                    <button class="button is-warning is-size-4"
                         :disabled="!validForm" @click="emailRegistration">
-                        Register 
+                        Register
                     </button>
                 </div>
             </div>
@@ -68,7 +65,7 @@ import each from 'lodash/fp/each'
 import keys from 'lodash/fp/keys'
 
 export default {
-    props: ['gapiReady'],
+    props: [],
     data (){
         return {
             message: '',
@@ -83,20 +80,9 @@ export default {
     },
 
     watch:{
-        gapiReady: {
-            handler(v){
-                if(v && this.$refs.googlebtn){
-                    this.renderGoogleBtn()
-                }
-            },
-            immediate: true,
-        },
     },
 
     mounted(){
-        if(this.gapiReady && this.$refs.googlebtn){
-            this.renderGoogleBtn()
-        }
     },
 
     computed:{
@@ -117,22 +103,11 @@ export default {
         },
 
         validForm(){
-            return this.validEmail && this.validPassword 
+            return this.validEmail && this.validPassword
         },
     },
 
     methods: {
-        renderGoogleBtn(){
-            gapi.signin2.render('google-login-btn', {
-                'scope': 'profile email',
-                'width': 280,
-                'height': 70,
-                'longtitle': true,
-                'theme': 'light',
-                'onsuccess': this.googleRegistration,
-                //'onfailure': onFailure
-            });
-        },
 
         resetLogin(){
             each(k=>{
@@ -152,26 +127,6 @@ export default {
             }).catch(error=>{
                 //TODO: handle 409 here
                 throw error
-            })
-        },
-
-        googleRegistration(googleUser){
-            // clear the state
-            return this.$store.dispatch('api/resetApi').then(()=>{
-                // if login succeeds try to create an account
-                const token = googleUser.getAuthResponse().id_token
-                return this.postAccount({
-                    token, provider:'google'
-                }).then(()=>{
-                    return this.postIdToken({token, provider:'google'})
-                }).then(()=>{
-                    return this.postAccessToken()
-                }).then(()=>{
-                    return this.getAccount()
-                }).then(account=>{
-                    //this.$store.commit('logIn', {account:account.data})
-                    this.$router.push({name: 'Account'})
-                })
             })
         },
 

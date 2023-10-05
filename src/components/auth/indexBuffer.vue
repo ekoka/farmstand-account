@@ -7,7 +7,7 @@
                     <div class="navbar-brand">
                         <div class="navbar-item">
                             <h1 class="title is-3">
-                                <router-link :to="{name: 'Index'}"> 
+                                <router-link :to="{name: 'Index'}">
                                     Productlist
                                 </router-link>
                             </h1>
@@ -20,25 +20,22 @@
                     </div>
                     <!--<div class="navbar-menu">
                         <div class="navbar-item">
-                            <router-link 
-                                class="button is-warning" 
+                            <router-link
+                                class="button is-warning"
                                 :to="{name:'Registration'}">
                                 Register
-                            </router-link> 
+                            </router-link>
                         </div>
                         <div class="navbar-item">
-                            <router-link 
-                                class="button is-primary" 
+                            <router-link
+                                class="button is-primary"
                                 :to="{name:'Login'}">
                                 Log in
-                            </router-link> 
+                            </router-link>
                         </div>
                     </div>-->
                 </div>
             </nav>
-        </div>
-        <div class="hero-body">
-            <router-view :gapiReady="gapiReady" />
         </div>
         <div class="hero-foot"></div>
     </div>
@@ -46,6 +43,6 @@
 </template>
 <script>
 export default {
-    props: ['gapiReady']
+    props: []
 }
 </script>

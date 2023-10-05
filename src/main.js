@@ -6,18 +6,10 @@ import router from './router'
 import './assets/css/main.scss'
 import cookies from '@/utils/cookies'
 
-//import GoogleAuth from 'vue-google-oauth'
-//import {GoogleClientId} from './assets/js/config'
-
-//Vue.use(GoogleAuth, {
-//    client_id: GoogleClientId
-//})
-//Vue.googleAuth().load()
-
-// adding a global event bus 
+// adding a global event bus
 const EventBus = new Vue()
 Object.defineProperties(Vue.prototype, {
-    $eventBus: { 
+    $eventBus: {
         get () {
             return EventBus
         }
@@ -41,7 +33,7 @@ new Vue({
     methods:{
         versionReset(){
             // Clear the state if the version changes. This ensures
-            // that clients are not stuck with a state that is inconsistent 
+            // that clients are not stuck with a state that is inconsistent
             // with latest changes.
             if(localStorage.getItem('VERSION') == VERSION){
                 return
@@ -68,7 +60,7 @@ new Vue({
 
     store,
     router,
-    components: { 
+    components: {
         App: ()=>import('./App')
     },
     template: '<App/>'
