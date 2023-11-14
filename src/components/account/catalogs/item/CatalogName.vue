@@ -198,7 +198,6 @@ export default {
             }
         },
         url({domain, path=null}){
-            // TODO: pull url template from config
             const access_key = this.$store.getters['api/accessKey'].key('access_key')
             const uri = URI.expand(this.$cnf.DOMAIN_HOST_TEMPLATE, {domain}).search({access_key})
             uri.pathname(path)
