@@ -5,9 +5,9 @@ import URI from 'urijs'
 
 export default {
     state: {
-        // when sending access_token via httponly cookie 
-        //accountUrl: null, 
-        // when sending access_token via headers 
+        // when sending access_token via httponly cookie
+        //accountUrl: null,
+        // when sending access_token via headers
         idToken: null,
         accessToken: null,
         account: null,
@@ -29,14 +29,14 @@ export default {
     mutations: {
         // when sending access_token via header
         setIdToken(state, {token}){
-            state.idToken = token 
+            state.idToken = token
         },
         setIdTokenCookie(state, {token, domain}){
             cookies.setCookie ('idToken', token, Infinity, '/', domain)
         },
         setAccessToken(state, {token}){
             const accessToken = {
-                token: HAL(token).key('token'), 
+                token: HAL(token).key('token'),
             }
             const payload = accessToken.token.split('.')[1]
             accessToken.payload = parseJwt(payload)
@@ -54,7 +54,7 @@ export default {
         postSignin({getters}, {data}){
             const url = getters.root.url('signins')
             return getters.http({
-                url, 
+                url,
                 data,
                 method:'post',
             }).then(response=>{
@@ -63,10 +63,10 @@ export default {
         },
 
         postAccount({dispatch, commit, getters}, {provider, token}){
-            const url = getters.root.url('accounts') 
+            const url = getters.root.url('accounts')
             return getters.http({
                 url,
-                data: {token, provider}, 
+                data: {token, provider},
                 method: 'post',
             }).then(response => {
                 return HAL(response.data)
@@ -94,7 +94,7 @@ export default {
         deletePaymentSource({getters}, {source_id}){
             const url = getters.account.url('payment_source', {source_id})
             return getters.http({
-                url, auth:true, method:'delete', 
+                url, auth:true, method:'delete',
             }).then(response=>{
                 return response.data
             })
@@ -118,7 +118,7 @@ export default {
                 url,
             }).then(response => {
 
-                const domain = URI(rootState.PRODUCTLIST_INDEX).domain()
+                const domain = URI(rootState.PROJECT_INDEX).domain()
                 commit('setIdToken', {token: response.data.token})
                 commit('setIdTokenCookie', {token: response.data.token, domain})
             })
@@ -166,7 +166,7 @@ export default {
         },
 
         getAccount({getters, commit}){
-            const url = getters.accountUrl 
+            const url = getters.accountUrl
             return getters.http({
                 url,
                 auth:true,

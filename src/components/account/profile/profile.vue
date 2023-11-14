@@ -2,7 +2,7 @@
 <div class="box">
     <div class="card-content">
         <div class="level">
-            <h1 class="title is-4">{{name}}</h1>
+            <h1 class="title is-4">{{account.name}}</h1>
             <router-link class="button is-link" :to="{name:'EditProfile'}">
                 Edit profile
             </router-link>
@@ -17,14 +17,5 @@
 <script>
 export default {
     props:['account'],
-    computed: {
-        name(){
-            if (this.account){
-                let name = [this.account.first_name, 
-                    this.account.last_name]
-                return name.join(' ')
-            }
-        },
-    },
 }
 </script>

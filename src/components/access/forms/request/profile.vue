@@ -4,10 +4,10 @@
         <div class="column">
             <div class="field">
                 <label class="label">
-                    First name
+                    Name
                 </label>
                 <div>
-                    <input class="input" v-model="mutable.account.first_name"/>
+                    <input class="input" v-model="mutable.account.name"/>
                 </div>
             </div>
 
@@ -16,7 +16,7 @@
                     Phone
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="mutable.account.data.phone"/>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                     Company
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="mutable.account.data.company"/>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                     Company website
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="mutable.account.data.website"/>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     Street address
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="mutable.account.data.address"/>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                     City
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="mutable.account.data.city"/>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                     Zip / Postal code
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="mutable.account.data.zip_postal_code"/>
                 </div>
             </div>
@@ -72,18 +72,10 @@
         <div class="column">
             <div class="field">
                 <label class="label">
-                    Last name
-                </label>
-                <div>
-                    <input class="input" v-model="mutable.account.last_name"/>
-                </div>
-            </div>
-            <div class="field">
-                <label class="label">
                     Fax
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="mutable.account.data.fax"/>
                 </div>
             </div>
@@ -93,7 +85,7 @@
                     Your role in the company
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="mutable.account.data.role"/>
                 </div>
             </div>
@@ -103,17 +95,17 @@
                     Company summary
                 </label>
                 <div>
-                    <textarea class="textarea" 
+                    <textarea class="textarea"
                         v-model="mutable.account.data.summary"/></textarea>
                 </div>
             </div>
-        
+
             <div class="field">
                 <label class="label">
                     State / Province / Region
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="mutable.account.data.state_province"/>
                 </div>
             </div>
@@ -123,7 +115,7 @@
                     Country
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="mutable.account.data.country"/>
                 </div>
             </div>

@@ -26,20 +26,11 @@
                 </div>
                 <div class="field">
                     <label class="label">
-                        First name (optional):
+                        Name (optional):
                     </label>
 
                     <div class="control">
-                        <input class="input" v-model="login.first_name"/>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">
-                        Last name (optional):
-                    </label>
-
-                    <div class="control">
-                        <input class="input" v-model="login.last_name"/>
+                        <input class="input" v-model="login.name"/>
                     </div>
                 </div>
                 <div class="control">
@@ -70,8 +61,7 @@ export default {
         return {
             message: '',
             login:{
-                first_name: null,
-                last_name: null,
+                name: null,
                 email: null,
                 password: null,
             },
@@ -117,7 +107,7 @@ export default {
         emailRegistration(){
             let token = this.login
             let email = token.email
-            let provider = 'productlist'
+            let provider = this.$cnf.PROJECT_NAME
             this.postAccount({
                 provider, token
             }).then(response=>{

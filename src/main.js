@@ -5,6 +5,7 @@ import store from './store'
 import router from './router'
 import './assets/css/main.scss'
 import cookies from '@/utils/cookies'
+import cnf from '@/config'
 
 // adding a global event bus
 const EventBus = new Vue()
@@ -20,6 +21,7 @@ store.$eventBus = EventBus
 
 Vue.config.productionTip = false
 Vue.prototype.$jsoncopy = obj=> JSON.parse(JSON.stringify(obj))
+Vue.prototype.$cnf = cnf
 
 /* eslint-disable no-new */
 const VERSION = '1'

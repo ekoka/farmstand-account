@@ -1,9 +1,9 @@
 <template>
 <div class="box">
-    <h4 class='subtitle is-4'><strong>{{companyName}}</strong> uses a catalog by Productlist.io.</h4>
+    <h4 class='subtitle is-4'><strong>{{companyName}}</strong> uses a catalog by <span class="is-capitalized">{{$cnf.PROJECT_NAME}}</span>.</h4>
 
     <p class="content is-size-5">
-        If you wish to view the catalog you must be granted access. Some information from your Productlist profile will be used to make the introduction.
+    If you wish to view the catalog you must be granted access. Some information from your <span class="is-capitalized">{{$cnf.PROJECT_NAME}}</span> profile will be used to make the introduction.
     </p>
 
     <div class="field">
@@ -54,7 +54,7 @@
 <script>
 export default{
     companyName(){
-        return 'Missarachew'
+        return 'ACME Candy'
     },
 }
 </script>

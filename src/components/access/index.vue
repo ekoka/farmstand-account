@@ -3,7 +3,7 @@
     <div class="container">
         <div class="level">
             <div class="level-left">
-                <h3 class="subtitle is-3"><strong>{{domain.data.label}}</strong> uses a catalog by Productlist.io.</h3>
+                <h3 class="subtitle is-3"><strong>{{domain.data.label}}</strong> uses a catalog by <span class="is-capitalized">{{$cnf.PROJECT_NAME}}</span>.</h3>
             </div>
             <div class="level-right">
                 <div class="control">
@@ -20,7 +20,7 @@
 
 <script>
 import URI from 'urijs'
-import findIndex from 'lodash/fp/findIndex' 
+import findIndex from 'lodash/fp/findIndex'
 import connect from './forms/connect'
 import request from './forms/request'
 import {mapActions} from 'vuex'
@@ -36,7 +36,7 @@ export default{
         }
     },
     mounted(){
-        const {domain, lang} = this.$route.query 
+        const {domain, lang} = this.$route.query
 
         this.getResource({
             resource:'publicDomain', params: {domain}

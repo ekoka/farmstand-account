@@ -6,9 +6,9 @@
                 <div class="container">
                     <div class="navbar-brand">
                         <div class="navbar-item">
-                            <h1 class="title is-1">
-                                <router-link :to="{name: 'Index'}"> 
-                                    Productlist
+                            <h1 class="title is-1 is-capitalized">
+                                <router-link :to="{name: 'Index'}">
+                                    {{$cnf.PROJECT_NAME}}
                                 </router-link>
                             </h1>
                         </div>
@@ -20,18 +20,18 @@
                     </div>
                     <div class="navbar-menu">
                         <div class="navbar-item">
-                            <router-link 
-                                class="button is-warning is-large" 
+                            <router-link
+                                class="button is-warning is-large"
                                 :to="{name:'Registration'}">
                                 Register
-                            </router-link> 
+                            </router-link>
                         </div>
                         <div class="navbar-item">
-                            <router-link 
-                                class="button is-primary is-large" 
+                            <router-link
+                                class="button is-primary is-large"
                                 :to="{name:'Login'}">
                                 Log in
-                            </router-link> 
+                            </router-link>
                         </div>
                     </div>
                 </div>

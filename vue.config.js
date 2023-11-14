@@ -2,6 +2,7 @@
 module.exports = {
     runtimeCompiler: true,
     devServer: {
-        allowedHosts: ['productlist.local']
+        public: 'producelist.dev:8081',
+        //allowedHosts: ['productlist.local']
     },
 }

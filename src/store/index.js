@@ -1,18 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 //import createPersistedState from 'vuex-persistedstate'
-import createPersistedState from '@/assets/js/persistedstate'
+import createPersistedState from '@/utils/persistedstate'
 import cookies from '@/utils/cookies'
 
 import api from './api'
 import URI from 'urijs'
-
-import {
-    DOMAIN_HOST_TEMPLATE,
-    API_ROOT,
-    API_PUBLIC_ROOT,
-    PRODUCTLIST_INDEX,
-} from '@/assets/js/config'
+import cnf from '@/config'
 
 Vue.use(Vuex)
 
@@ -21,17 +15,17 @@ export default new Vuex.Store({
     state: {
         currentLang: 'en',
         defaultLang: 'en',
-        PRODUCTLIST_INDEX,
+        ...cnf,
     },
     getters: {
         API_ROOT_URI(state, getters){
-            return URI(API_ROOT)
+            return URI(state.API_ROOT)
         },
         API_PUBLIC_ROOT_URI(state, getters){
-            return URI(API_PUBLIC_ROOT)
+            return URI(state.API_PUBLIC_ROOT)
         },
-        PRODUCTLIST_URI(state, getters){
-            return URI(PRODUCTLIST_INDEX)
+        PROJECT_URI(state, getters){
+            return URI(state.PROJECT_INDEX)
         },
 
         URI(state, getters){
@@ -50,9 +44,9 @@ export default new Vuex.Store({
 
     actions: {
         logIn({getters, state, dispatch}){
-            const domain = getters.PRODUCTLIST_URI.domain()
+            const domain = getters.PROJECT_URI.domain()
             //cookies.setCookie (
-            //    'account_id', getters['api/account'].data.account_id, 
+            //    'account_id', getters['api/account'].data.account_id,
             //    Infinity, '/', domain)
             //cookies.setCookie (
             //    'id_token', state.api.idToken,
@@ -62,7 +56,7 @@ export default new Vuex.Store({
         },
 
         logOut({state, dispatch}){
-            const indexUrl = URI(state.PRODUCTLIST_INDEX)
+            const indexUrl = URI(state.PROJECT_INDEX)
             const domain = indexUrl.domain()
             cookies.removeCookie('account_id', '/', domain)
             cookies.removeCookie('idToken', '/', domain)
@@ -74,7 +68,6 @@ export default new Vuex.Store({
     },
 
     plugins: [createPersistedState({
-        //key: 'productlist-admin',
         storage: localStorage,
     })],
 })

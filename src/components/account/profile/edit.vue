@@ -10,19 +10,19 @@
             <div class="level-right">
                 <div class="field is-grouped">
                     <div class="control">
-                        <router-link class="button is-link is-outlined" 
+                        <router-link class="button is-link is-outlined"
                             :to="{name: 'Profile'}">
                             Cancel
                         </router-link>
                     </div>
                     <div class="control">
-                        <button class="button is-link" 
+                        <button class="button is-link"
                             @click="saveAccount">
-                            Save profile 
+                            Save profile
                         </button>
                     </div>
                 </div>
-            
+
             </div>
         </div>
     </stickycontent>
@@ -30,19 +30,10 @@
         <div class="card-content">
             <div class="field">
                 <label class="label">
-                    First name
+                    Name
                 </label>
                 <div>
-                    <input class="input" v-model="account.first_name"/>
-                </div>
-            </div>
-
-            <div class="field">
-                <label class="label">
-                    Last name
-                </label>
-                <div>
-                    <input class="input" v-model="account.last_name"/>
+                    <input class="input" v-model="account.name"/>
                 </div>
             </div>
 
@@ -51,7 +42,7 @@
                     Phone
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="account.data.phone"/>
                 </div>
             </div>
@@ -61,7 +52,7 @@
                     Fax
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="account.data.fax"/>
                 </div>
             </div>
@@ -71,7 +62,7 @@
                     Company
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="account.data.company"/>
                 </div>
             </div>
@@ -81,7 +72,7 @@
                     Your role in the company
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="account.data.role"/>
                 </div>
             </div>
@@ -91,7 +82,7 @@
                     Company website
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="account.data.website"/>
                 </div>
             </div>
@@ -101,38 +92,38 @@
                     Company summary
                 </label>
                 <div>
-                    <textarea class="textarea" 
+                    <textarea class="textarea"
                         v-model="account.data.summary"/></textarea>
                 </div>
             </div>
-        
+
             <div class="field">
                 <label class="label">
                     Street address
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="account.data.address"/>
                 </div>
             </div>
-            
+
 
             <div class="field">
                 <label class="label">
                     City
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="account.data.city"/>
                 </div>
             </div>
-            
+
             <div class="field">
                 <label class="label">
                     State / Province / Region
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="account.data.state_province"/>
                 </div>
             </div>
@@ -142,7 +133,7 @@
                     Country
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="account.data.country"/>
                 </div>
             </div>
@@ -152,7 +143,7 @@
                     Zip / Postal code
                 </label>
                 <div>
-                    <input class="input" 
+                    <input class="input"
                     v-model="account.data.zip_postal_code"/>
                 </div>
             </div>
@@ -165,7 +156,7 @@
 <script>
 
 import {mapActions} from 'vuex'
-    
+
 export default {
     components: {
         notification: ()=>import( '@/components/utils/messaging/notification'),

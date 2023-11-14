@@ -13,7 +13,7 @@ export default {
     methods:{
 
         logout(){
-            window.location.href = this.$store.state.PRODUCTLIST_INDEX
+            window.location.href = this.$store.state.PROJECT_INDEX
         },
     },
 }

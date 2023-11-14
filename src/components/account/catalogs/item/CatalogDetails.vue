@@ -22,7 +22,7 @@
             <div class="level-item">
                 <div class="field">
                     <button class="is-link is-outlined button" @click="prev">
-                    Back 
+                    Back
                     </button>
                 </div>
             </div>

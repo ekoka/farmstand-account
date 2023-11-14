@@ -3,8 +3,7 @@ import find from 'lodash/fp/find'
 import URI from 'urijs'
 import URITemplate from 'urijs/src/URITemplate'
 
-// TODO: make 'host' configurable 
-//import {API_HOST} from '../assets/js/config'
+// TODO: make 'host' configurable
 
 export function HAL(resource){
     return new HALResource(resource)
@@ -15,7 +14,7 @@ export class HALResource {
         this.resource = resource || {}
         //this.host = API_HOST
         this._links = this.resource._links || {}
-        this._halifyEmbedded() 
+        this._halifyEmbedded()
     }
 
     _halifyEmbedded(){
@@ -58,7 +57,7 @@ export class HALResource {
         collection = this.resource._embedded[collection]
         if (!collection || !Array.isArray(collection)){
             // TODO raise an error
-            return 
+            return
         }
         const idx = collection.findIndex(item=>{
             return item[identifier]==replacement[identifier]
@@ -76,7 +75,7 @@ export class HALResource {
         collection = this.resource._embedded[collection]
         if (!collection || !Array.isArray(collection)){
             // TODO raise an error
-            return 
+            return
         }
         const idx = collection.findIndex(item=>{
             return item[identifier]==value
@@ -85,7 +84,7 @@ export class HALResource {
             // not found
             return
         }
-        // delete item 
+        // delete item
         collection.splice(idx, 1)
         return true;
     }
@@ -118,7 +117,7 @@ export class HALResource {
     get _curies(){
         return this._links.curies || []
     }
-    
+
     get _namespaces(){
         return map((c)=>{
             return c['name']

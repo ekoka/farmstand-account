@@ -5,7 +5,7 @@
     <div class="container">
         <div class="navbar-brand">
             <router-link class="navbar-item" :to="{name:'Account'}">
-                <strong>{{`${account.key('first_name')} ${account.key('last_name')}`}}</strong>
+                <strong>{{`${account.key('name')}`}}</strong>
             </router-link>
 
             <div id="navbarBurger" class="navbar-burger burger" data-target="navMenuDocumentation">
@@ -31,7 +31,7 @@ export default {
         navbarStart: ()=>import(  './navbar-start'),
         navbarEnd: ()=>import(  './navbar-end'),
     },
-    
+
     computed:{
         ...mapGetters({
             account: 'api/account',

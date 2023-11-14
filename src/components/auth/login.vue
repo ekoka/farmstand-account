@@ -106,7 +106,7 @@ export default {
                 email:this.email,
             }
             this.postIdToken({
-                token, provider: 'productlist'
+                token, provider: this.$cnf.PROJECT_NAME
             }).then(()=>{
                 return this.postAccessToken()
             }).then(()=>{
@@ -123,7 +123,7 @@ export default {
             const key = 'afterLogin'
             const cookie = cookies.getCookie(key)
             if(cookie){
-                const scope = this.$store.getters.PRODUCTLIST_URI.domain()
+                const scope = this.$store.getters.PROJECT_URI.domain()
                 cookies.removeCookie(key, '/', scope)
                 const action = JSON.parse(atob(cookie))
                 this.$router.push(action)

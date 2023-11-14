@@ -1,8 +1,8 @@
 <template>
 <div>
-    <h3 class="title is-3">You're about to create a <em>Productlist Catalog</em> that will be hosted at https://{{domain.name}}.productlist.io/. </h3>
-        
-    <h3 class="title is-4">Additional charges of CAD $50.00 will be billed to your account each month (partial month billed proportionally).</h3>
+    <h3 class="title is-3">You're about to create a <em class="is-capitalized">{{$cnf.PROJECT_NAME}} Catalog</em> that will be hosted at {{domained_url}}. </h3>
+
+    <h3 class="title is-4">Additional charges of CAD $0.00 will be billed to your account each month (partial month billed proportionally).</h3>
     <h3 class="title is-4">The catalog can store and showcase 200 products.</h3>
     <div class="level">
         <div class="level-left">
@@ -24,7 +24,7 @@
         <div class="level-right">
             <div class="level-item">
                 <button href="" class="is-link button" @click="create">
-                Create catalog 
+                Create catalog
                 </button>
             </div>
         </div>
@@ -33,10 +33,18 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex' 
+import URI from 'urijs'
+import {mapActions} from 'vuex'
 
 export default {
     props: ['domain'],
+
+    computed: {
+        domained_url(){
+            const urlTemplate = this.$cnf.DOMAIN_HOST_TEMPLATE
+            const uri = URI.expand(urlTemplate, {domain:this.domain.name})
+        }
+    },
 
     methods:{
         prev(){

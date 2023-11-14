@@ -4,26 +4,26 @@
 
     <br>
 
-    <p>You first need to choose a nickname that will uniquely identify your catalog as part of the <strong>Productlist</strong> network.
-        
+    <p>You first need to choose a nickname that will uniquely identify your catalog as part of the <strong class="is-capitalized">{{$cnf.PROJECT_NAME}}</strong> network.
+
         <br><br>
-        
-        <span class="has-text-grey is-size-5">e.g. https://<span class="has-text-info is-italic">yourcatalog</span>.productlist.io</span>
+
+        <span class="has-text-grey is-size-5">e.g. {{$cnf.DOMAIN_PROTOCOL}}://<span class="has-text-info is-italic">yourcatalog</span>.{{$cnf.DOMAIN_BASE_NAME}}</span>
     </p>
 
         <br>
     <div class="field has-text-centered has-addons is-size-4">
-        <div class="control is-size-4">https://</div> 
+        <div class="control is-size-4">{{$cnf.DOMAIN_PROTOCOL}}://</div>
         <div class="control">
-            <input class="input" placeholder="yourcatalog" v-model="name"/> 
+            <input class="input" placeholder="yourcatalog" v-model="name"/>
         </div><!-- control -->
         <div class="control is-size-4">
-            .productlist.io
+            .{{$cnf.DOMAIN_BASE_NAME}}
         </div><!-- control -->
 
 
     </div><!-- field -->
-    <validationMsg :showicon="true" v-if="search.name!==null" :val="nameMsg"> 
+    <validationMsg :showicon="true" v-if="search.name!==null" :val="nameMsg">
     </validationMsg>
     <div class="level">
         <div class="level-left">
@@ -33,9 +33,9 @@
                 </router-link>
             </div>
             <div class="level-item">
-                <button 
+                <button
                     v-if="validLength"
-                    class="is-link button" 
+                    class="is-link button"
                     :class="{'is-loading': nameIsChanging}"
                     @click="next"
                     :disabled="!validName"
@@ -81,7 +81,7 @@ export default {
         }),
 
         validLength(){
-            return this.minLengthValidator && this.maxLengthValidator 
+            return this.minLengthValidator && this.maxLengthValidator
         },
 
         maxLengthValidator(){
@@ -100,8 +100,8 @@ export default {
         },
 
         validName(){
-            if(this.validLength && 
-                    !this.nameIsChanging && 
+            if(this.validLength &&
+                    !this.nameIsChanging &&
                     !this.invalidCharacters){
                 if (!this.search.available){
                     return false
@@ -112,15 +112,15 @@ export default {
         },
         nameMsg(){
             if(this.invalidCharacters){
-                return { 
-                    value: false, 
+                return {
+                    value: false,
                     msg: 'Only numbers and non-accented characters.',
                     showicon: true,
                 }
             }
             if(!this.minLengthValidator){
-                return { 
-                    value: false, 
+                return {
+                    value: false,
                     msg: '',
                     showicon: false,
                 }
@@ -177,7 +177,7 @@ export default {
                     this.search.name = name
                 }
             }
-            // only call the server if nothing changed since 
+            // only call the server if nothing changed since
             // the 1000ms delay.
             if(currentChange===this.lastChange){
                 // if nothing changed since delay, unset the change flag
@@ -195,13 +195,12 @@ export default {
                         }
                     })
                 }
-            } 
+            }
         },
         url({domain, path=null}){
-            const urlTemplate = 'http://{domain}.productlist.local:8082'
+            // TODO: pull url template from config
             const access_key = this.$store.getters['api/accessKey'].key('access_key')
-            //const urlTemplate = 'http://{domain}.productlist.local:8082/admin'
-            const uri = URI.expand(urlTemplate, {domain}).search({access_key})
+            const uri = URI.expand(this.$cnf.DOMAIN_HOST_TEMPLATE, {domain}).search({access_key})
             uri.pathname(path)
             return uri.toString()
         },
@@ -210,7 +209,7 @@ export default {
             return this.getDomainNameCheck({domain})
         },
 
-        next(){      
+        next(){
             if (this.name){
                 let data = this.$jsoncopy(this.domain)
                 data.name = this.name

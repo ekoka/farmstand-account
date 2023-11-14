@@ -27,7 +27,7 @@
                 </tbody>
             </table>
 
-        
+
         </div><!-- media -->
         <router-link class="button is-outlined is-link" :to="{name:'CatalogItem'}">
             Add a new catalog
@@ -44,7 +44,6 @@ import includes from 'lodash/fp/includes'
 import compose from 'lodash/fp/compose'
 import toPairs from 'lodash/fp/toPairs'
 import filter from 'lodash/fp/filter'
-import {DOMAIN_HOST_TEMPLATE} from '@/assets/js/config'
 import {mapActions, mapGetters} from 'vuex'
 import cookies from '@/utils/cookies'
 
@@ -91,7 +90,7 @@ export default {
 
     methods: {
         url({domain, path=null}){
-            const urlTemplate = DOMAIN_HOST_TEMPLATE
+            const urlTemplate = this.$cnf.DOMAIN_HOST_TEMPLATE
             const uri = URI.expand(urlTemplate, {domain})
             uri.pathname(path)
             return uri.toString()
@@ -102,7 +101,7 @@ export default {
         ...mapActions({
             getDomains: 'api/getDomains',
         }),
-        
+
     },
 }
 </script>

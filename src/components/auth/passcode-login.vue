@@ -8,10 +8,10 @@ export default {
     mounted(){
         // get signin_id from url
         // get passcode from url
-        const {signin_id, passcode, lang} = this.$route.query 
+        const {signin_id, passcode, lang} = this.$route.query
         const token = {passcode, signin_id}
         this.postIdToken({
-            provider:'productlist',
+            provider:this.$cnf.PROJECT_NAME,
             token,
         }).then(()=>{
             return this.postAccessToken()
@@ -24,8 +24,8 @@ export default {
         })
 
         //TODO: set lang
-        
-        // post access key  
+
+        // post access key
     },
 
     methods: {

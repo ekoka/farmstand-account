@@ -15,12 +15,12 @@
                 <tbody>
                     <tr v-for="d,k in domains">
                         <td>
-                            {{d.name}}
+                            {{d.name}} <span v-if="d.data.label">- {{d.data.label}}</span>
                         </td>
                         <td>
                             <router-link :to="{name:'CatalogSettings', params:{domain: d.name}}">
                                 Settings
-                            </router-link> 
+                            </router-link>
                         </td>
                         <td></td>
                         <td class="has-text-right">
@@ -33,7 +33,7 @@
                 </tbody>
             </table>
 
-        
+
         </div><!-- media -->
         <router-link class="button is-outlined is-link" :to="{name:'CatalogItem'}">
             Add a new catalog
@@ -50,9 +50,7 @@ import includes from 'lodash/fp/includes'
 import compose from 'lodash/fp/compose'
 import toPairs from 'lodash/fp/toPairs'
 import filter from 'lodash/fp/filter'
-import {DOMAIN_HOST_TEMPLATE} from '@/assets/js/config'
 import {mapActions, mapGetters} from 'vuex'
-import cookies from '@/utils/cookies'
 
 export default {
     components: {
@@ -91,12 +89,13 @@ export default {
                     return includes(domain.data.name, domains)
                 }),
             )(resp.embedded('domains'))
+            console.log(this.domains)
         })
     },
 
     methods: {
         url({domain, path=null}){
-            const urlTemplate = DOMAIN_HOST_TEMPLATE
+            const urlTemplate = this.$cnf.DOMAIN_HOST_TEMPLATE
             const uri = URI.expand(urlTemplate, {domain})
             uri.pathname(path)
             return uri.toString()
@@ -107,7 +106,7 @@ export default {
         ...mapActions({
             getDomains: 'api/getDomains',
         }),
-        
+
     },
 }
 </script>

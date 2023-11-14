@@ -3,7 +3,7 @@
     <div class="card-content">
         <div class="field">
             <label v-if="name" class="label">
-                <span class="has-text-weight-normal"> {{request.first_name}} {{request.last_name}} </span>
+                <span class="has-text-weight-normal"> {{request.name}} </span>
             </label>
         </div>
         <div class="field">
@@ -42,7 +42,7 @@
         <div class="field">
             <div class="control">
                 <button @click="$emit('close')" class="button">
-                    Close 
+                    Close
                 </button>
             </div>
         </div>
@@ -54,10 +54,5 @@
 import trim from 'lodash/fp/trim'
 export default {
     props: ['request'],
-    computed:{
-        name(){
-            return trim(this.request.first_name) && trim(this.request.last_name)
-        }
-    },
 }
 </script>

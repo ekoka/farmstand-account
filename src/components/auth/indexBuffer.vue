@@ -6,9 +6,9 @@
                 <div class="container">
                     <div class="navbar-brand">
                         <div class="navbar-item">
-                            <h1 class="title is-3">
+                            <h1 class="title is-3 is-capitalized">
                                 <router-link :to="{name: 'Index'}">
-                                    Productlist
+                                    {{$cnf.PROJECT_NAME}}
                                 </router-link>
                             </h1>
                         </div>
@@ -37,12 +37,7 @@
                 </div>
             </nav>
         </div>
-        <div class="hero-foot"></div>
+        <div class="hero-foot"><router-view /></div>
     </div>
 </section>
 </template>
-<script>
-export default {
-    props: []
-}
-</script>

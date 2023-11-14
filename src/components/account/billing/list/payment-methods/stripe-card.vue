@@ -28,9 +28,9 @@
 
 <script>
 
-import {STRIPE_PUBLIC_KEY} from '@/assets/js/config'
+import cnf from '@/config'
 
-const stripe = Stripe(STRIPE_PUBLIC_KEY)
+const stripe = Stripe(cnf.STRIPE_PUBLIC_KEY)
 const elements = stripe.elements()
 const card = elements.create('card')
 

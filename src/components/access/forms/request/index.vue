@@ -6,16 +6,16 @@
     <modal id="preview" :active.sync="showPreview">
         <preview @close="showPreview=false" :request="previewData"/>
     </modal>
-    <h5 class="subtitle is-3">Request access to this catalog</h5> 
-    
+    <h5 class="subtitle is-3">Request access to this catalog</h5>
+
     <div class="card">
         <div class="card-content">
-                        <p class="is-size-4"> Your <em>Productlist</em> profile will be used to make introductions.</p>
+            <p class="is-size-4"> Your <em class="is-capitalized">{{$cnf.PROJECT_NAME}}</em> profile will be used to make introductions.</p>
         </div>
         <div class="card-content">
             <div class="control">
                 <label class="label">
-                    Name: <span class="has-text-weight-normal"> {{account.first_name}} {{account.last_name}} </span>
+                    Name: <span class="has-text-weight-normal">{{account.name}}</span>
                 </label>
             </div>
             <div class="control">
@@ -44,8 +44,8 @@
                 </div><!-- level-right -->
 
             </div><!-- level -->
-            
-            
+
+
             </p>
             <div class="field">
             <div class="control">
@@ -159,8 +159,7 @@ export default{
         },
         previewData(){
             const rv = {
-                first_name: this.account.first_name,
-                last_name: this.account.last_name,
+                name: this.account.name,
                 email: this.email,
             }
             each(i=>{
@@ -189,7 +188,7 @@ export default{
             getAccount: 'api/getAccount',
             postAccessRequest: 'api/postAccessRequest',
         })
-        
+
     },
 }
 </script>
