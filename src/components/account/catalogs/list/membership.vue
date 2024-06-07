@@ -1,7 +1,7 @@
 <template>
 <div class="card">
     <div class="card-content">
-        <h4 class="title is-4">Catalogs you can view</h4>
+        <h4 class="title is-4">Catalogs you're a guest on</h4>
         <div class="media">
             <table class="table is-hoverable is-fullwidth">
                 <thead>
@@ -27,11 +27,8 @@
                 </tbody>
             </table>
 
-
         </div><!-- media -->
-        <router-link class="button is-outlined is-link" :to="{name:'CatalogItem'}">
-            Add a new catalog
-        </router-link>
+        <SearchCatalog />
     </div><!-- card-content -->
 </div><!-- card -->
 </template>
@@ -49,7 +46,7 @@ import cookies from '@/utils/cookies'
 
 export default {
     components: {
-        NewCatalog: ()=>import(  '../item'),
+        SearchCatalog: ()=>import(  '../search'),
     },
 
     computed: {

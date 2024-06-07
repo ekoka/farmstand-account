@@ -32,7 +32,7 @@ export default {
             state.idToken = token
         },
         setIdTokenCookie(state, {token, domain}){
-            cookies.setCookie ('idToken', token, Infinity, '/', domain)
+            cookies.setCookie('idToken', token, Infinity, '/', domain)
         },
         setAccessToken(state, {token}){
             const accessToken = {
@@ -186,8 +186,7 @@ export default {
         },
 
         getDomainNameCheck({commit, getters}, {domain}={}){
-            const url = getters.root.url(
-                'domain_name_check', null, {q:domain})
+            const url = getters.root.url('domain_name_check', null, {q:domain})
             return getters.http({
                 url,
             }).then(response=>{

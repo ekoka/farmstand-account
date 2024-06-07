@@ -1,9 +1,12 @@
 <template>
 <div>
     <div class="content">
-        <ownership></ownership>
+        <ownership />
     </div>
-    <membership></membership>
+    <div class="content">
+        <membership />
+    </div>
+
 </div>
 </template>
 

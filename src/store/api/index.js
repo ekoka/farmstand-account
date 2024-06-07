@@ -115,7 +115,8 @@ const API = {
 
         getPublicDomain({getters, dispatch}, {domain}){
             return dispatch('getResource', {
-                resource:'publicRoot', params:{domain}
+                resource:'publicRoot',
+                params:{domain},
             }).then(publicRoot=>{
                 const url = publicRoot.url('public_domain', {domain})
                 return getters.http({url}).then(response=>{

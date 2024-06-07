@@ -1,50 +1,26 @@
 <template>
 <div class="is-size-5">
-    <p class="">You're about to create a new catalog.</p>
-
-    <br>
-
-    <p>You first need to choose a nickname that will uniquely identify your catalog as part of the <strong class="is-capitalized">{{$cnf.PROJECT_NAME}}</strong> network.
-
-        <br><br>
-
-        <span class="has-text-grey is-size-5">e.g. {{$cnf.DOMAIN_PROTOCOL}}://<span class="has-text-info is-italic">yourcatalog</span>.{{$cnf.DOMAIN_BASE_NAME}}</span>
-    </p>
-
-        <br>
     <div class="field has-text-centered has-addons is-size-4">
-        <div class="control is-size-4">{{$cnf.DOMAIN_PROTOCOL}}://</div>
         <div class="control">
-            <input class="input" placeholder="yourcatalog" v-model="name"/>
+            <label class="label"> Request access to a catalog
+                <input class="input" placeholder="Search catalog" v-model="name"/>
+            </label>
         </div><!-- control -->
-        <div class="control is-size-4">
-            .{{$cnf.DOMAIN_BASE_NAME}}
-        </div><!-- control -->
-
-
     </div><!-- field -->
-    <validationMsg :showicon="true" v-if="search.name!==null" :val="valMsg">
-    </validationMsg>
+    <!--<ValidationMsg :showicon="true" v-if="(domain.name!==null && !domain.found)" :val="valMsg"/>-->
     <div class="level">
         <div class="level-left">
             <div class="level-item">
-                <router-link :to="{name:'CatalogList'}" class="button is-outlined">
-                    Cancel
-                </router-link>
-            </div>
-            <div class="level-item">
                 <button
-                    v-if="validLength"
                     class="is-link button"
                     :class="{'is-loading': nameIsChanging}"
                     @click="next"
-                    :disabled="!validName"
-                    >
-                    Continue
-                </button>
+                    :disabled="!domain.found"
+                    > Request access </button>
             </div>
         </div>
     </div>
+    <ValidationMsg :showicon="true" v-if="!(domain.name===null || domain.found)" :val="valMsg"/>
 </div>
 </template>
 
@@ -53,25 +29,23 @@ import URI from 'urijs'
 import {mapActions, mapGetters} from 'vuex'
 import any from 'lodash/fp/any'
 
-import validationMsg from './validation-msg'
 
 export default {
-    props: ['domain'],
     components: {
-        validationMsg,
+        ValidationMsg: ()=> import('./ValidationMsg'),
     },
 
     data(){
         return {
             message: '',
             nameIsChanging: false,
-            search:{
+            domain:{
                 name: null,
-                available: false,
+                found: false,
             },
             nameAvailable: true,
             lastChange: null,
-            name: this.domain.name,
+            name: null,
         }
     },
 
@@ -82,6 +56,9 @@ export default {
 
         validLength(){
             return this.minLengthValidator && this.maxLengthValidator
+        },
+
+        existingDomain(){
         },
 
         maxLengthValidator(){
@@ -103,7 +80,7 @@ export default {
             if(this.validLength &&
                     !this.nameIsChanging &&
                     !this.invalidCharacters){
-                if (!this.search.available){
+                if (!this.domain.exist){
                     return false
                 } else {
                     return true
@@ -132,28 +109,29 @@ export default {
                     showicon: true,
                 }
             }
-            if(this.search.available){
+            if(this.domain.found){
                 return {
                     value: true,
-                    msg: `"${this.search.name}" is available...`,
+                    //msg: `Request access to "${this.domain.name}"...`,
+                    msg: null,
                     showicon: true,
                 }
-            } else {
-                return {
-                    value: false,
-                    msg: `"${this.search.name}" is not available...`,
-                    showicon: true,
-                }
+            }
+            return {
+                value: false,
+                //msg: `"${this.domain.name}" does not exist...`,
+                msg: `Catalog does not exist...`,
+                showicon: true,
             }
         },
     },
 
     watch:{
         'name': {
-            handler(n, o){
+            handler(newval, oldval){
                 const changeTimestamp = this.resetSearch()
                 setTimeout(()=>{
-                    this.updateSearchResult({changeTimestamp, name:n})
+                    this.updateSearchResult({changeTimestamp})
                 }, 1000)
             },
             immediate: true,
@@ -161,22 +139,22 @@ export default {
     },
 
     methods: {
-        setResult({name, available, changeTimestamp}){
-            // if nothing changed since http get
+        setResult({found, changeTimestamp}){
+            // If something changed in between, abort.
             if(changeTimestamp!==this.changeTimestamp) return
             //this.nameIsChanging = false
-            this.search.available = available
-            this.search.name = name
+            this.domain.found = found
+            this.domain.name = this.name
         },
         resetSearch(){
-            this.search.available = null
-            this.search.name = null
+            this.domain.found = null
+            this.domain.name = null
             this.nameIsChanging = true
             this.changeTimestamp = Date.now()
             return this.changeTimestamp
         },
 
-        updateSearchResult({changeTimestamp, name}){
+        updateSearchResult({changeTimestamp}){
             // Abort call to the server if something changed since the 1000ms delay.
             if(changeTimestamp!==this.changeTimestamp) return
             // If nothing changed since delay, unset the change flag.
@@ -184,23 +162,24 @@ export default {
             // Only proceed with http if valid length.
             if (!this.validLength) return
             // Proceed with http get.
-            const _sr = ({available})=>this.setResult({name, available, changeTimestamp})
-            this.searchDomain(name).then(response=>{
-                _sr({available:false})
+            const _sr = ({found})=>{this.setResult({found, changeTimestamp})}
+            this.searchDomain(this.name).then(response=>{
+                _sr({found:true})
             }).catch(error=>{
-                _sr({available:error.response.status==404})
+                _sr({found:false})
             })
         },
 
         url({domain, path=null}){
             const access_key = this.$store.getters['api/accessKey'].key('access_key')
-            const uri = URI.expand(this.$cnf.DOMAIN_HOST_TEMPLATE, {domain}).search({access_key})
+            const uri = URI.expand(this.$cnf.DOMAIN_HOST_TEMPLATE, {domain})
+                .search({access_key})
             uri.pathname(path)
             return uri.toString()
         },
 
         searchDomain(domain){
-            return this.getDomainNameCheck({domain})
+            return this.getPublicDomain({domain})
         },
 
         next(){
@@ -212,7 +191,7 @@ export default {
         },
 
         ...mapActions({
-            getDomainNameCheck: 'api/getDomainNameCheck',
+            getPublicDomain: 'api/getPublicDomain',
         }),
     },
 }

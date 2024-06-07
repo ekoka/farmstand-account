@@ -10,6 +10,7 @@ export default {
         // get passcode from url
         const {signin_id, passcode, lang} = this.$route.query
         const token = {passcode, signin_id}
+        console.log(token)
         this.postIdToken({
             provider:this.$cnf.PROJECT_NAME,
             token,
